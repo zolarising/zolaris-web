@@ -1,0 +1,33 @@
+{
+  "name": "Zolaris Ingeniería",
+  "short_name": "Zolaris",
+  "description": "Energía Solar en Pasto, Nariño. Instalaciones solares para hogares, empresas y zonas rurales.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B2B46",
+  "theme_color": "#F7A600",
+  "orientation": "portrait-primary",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "/assets/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["business", "utilities"],
+  "screenshots": [
+    {
+      "src": "/assets/fotoh1.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg"
+    }
+  ]
+}

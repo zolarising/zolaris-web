@@ -1,0 +1,9 @@
+35 paneles solares
+100% ahorro de energia
+potencia : 18 kW
+Ahorro mensual : $ 1.700.000 cop
+Almacenamiento de energia : 10 kW ( 2 baterias )
+
+
+Ubicacion
+1.242439, -77.306375

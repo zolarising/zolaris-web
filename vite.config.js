@@ -9,6 +9,9 @@ export default defineConfig({
     tailwindcss(),
   ],
   build: {
+    // Compila a docs/ para poder publicar en GitHub Pages (opcion /docs)
+    outDir: 'docs',
+    emptyOutDir: true,
     rollupOptions: {
       input: {
         main:       resolve(__dirname, 'index.html'),

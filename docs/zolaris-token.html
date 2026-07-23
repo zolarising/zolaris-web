@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Zolaris Token - El futuro de la inversión en energía solar. Participa en el ecosistema dual ZOL (Utilidad) y ZOL-PPA (Inversión RWA)." />
+    <title>Zolaris Token | Inversión & Utilidad Web3</title>
+    <link rel="icon" type="image/png" href="/zolaris-web/assets/logo.png" />
+    <link rel="manifest" href="/zolaris-web/manifest.json" />
+    <meta name="theme-color" content="#06b6d4" />
+    <link rel="apple-touch-icon" href="/zolaris-web/assets/logo.png" />
+    <!-- Open Graph -->
+    <meta property="og:title" content="Zolaris Token | Energía Solar Tokenizada" />
+    <meta property="og:description" content="Invierte en energía solar con el token ZOL-PPA de Zolaris. Security Token respaldado por activos reales de generación solar." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/zolaris-web/assets/logo.png" />
+    <meta property="og:url" content="https://zolarisingenieria.com/zolaris-token.html" />
+    <meta property="og:locale" content="es_CO" />
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Zolaris Token — Energía Solar en Blockchain" />
+    <meta name="twitter:description" content="El primer Security Token colombiano respaldado por activos de energía solar real. ZOL y ZOL-PPA." />
+    <meta name="twitter:image" content="/zolaris-web/assets/logo.png" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    
+    
+    
+    <style>
+        body { background-color: #05121e; color: #f8fafc; overflow-x: hidden; }
+        
+        /* Efecto Glassmorphism */
+        .glass-nav { 
+            background: rgba(5, 18, 30, 0.85); 
+            backdrop-filter: blur(16px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Utilidades Web3 */
+        .text-glow { text-shadow: 0 0 20px rgba(247, 166, 0, 0.5); }
+        .text-glow-cyan { text-shadow: 0 0 20px rgba(6, 182, 212, 0.5); }
+        
+        .crypto-card {
+            background: linear-gradient(145deg, #0f2438, #081624);
+            box-shadow:  5px 5px 10px #040c14, -5px -5px 10px #163450;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #05121e; }
+        ::-webkit-scrollbar-thumb { background: #1B3D6D; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #F7A600; }
+
+        /* Animación de entrada */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+  <script type="module" crossorigin src="/zolaris-web/assets/main-DHmLse3v.js"></script>
+  <link rel="stylesheet" crossorigin href="/zolaris-web/assets/main-BZCdK1r8.css">
+</head>
+<body class="antialiased">
+
+    <nav class="fixed w-full z-50 glass-nav transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-24">
+                
+                <a href="index.html" class="flex-shrink-0 flex items-center gap-3 cursor-pointer group">
+                    <img class="h-12 w-auto transition-transform transform group-hover:scale-110 duration-500" 
+                        src="/zolaris-web/assets/logo.png" 
+                        alt="Zolaris Logo">
+                </a>
+                
+                <div class="hidden lg:flex space-x-8 items-center">
+                    <a href="index.html" class="text-slate-300 font-medium hover:text-white hover:scale-105 transition-all">Inicio</a>
+                    <a href="nosotros.html" class="text-slate-300 font-medium hover:text-white hover:scale-105 transition-all">Nuestra Historia</a>
+                    <a href="proyectos.html" class="text-slate-300 font-medium hover:text-white hover:scale-105 transition-all">Proyectos</a>
+                    <a href="servicios.html" class="text-slate-300 font-medium hover:text-white hover:scale-105 transition-all">Servicios</a>
+
+                    <a href="zolaris-token.html" class="group relative inline-flex items-center gap-3 px-5 py-2.5 rounded-full 
+                            bg-[#0B2B46]/30 border border-cyan-500/50 backdrop-blur-sm
+                            text-cyan-400 font-bold text-sm tracking-wide
+                            transition-all duration-300 ease-out
+                            hover:border-cyan-400 hover:bg-cyan-950/30 
+                            hover:shadow-[0_0_20px_rgba(34,211,238,0.6)] 
+                            hover:-translate-y-0.5 active:scale-95">
+                        
+                        <span class="relative flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500"></span>
+                        </span>
+
+                        <span class="relative z-10 drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]">
+                            Zolaris Token
+                        </span>
+
+                        <div class="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500/0 via-cyan-500/10 to-cyan-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    </a>
+                    
+                    <a href="calculadora.html" class="group relative px-6 py-3 font-bold text-zolaris-navy rounded-full bg-gradient-to-r from-zolaris-yellow to-zolaris-orange shadow-[0_0_15px_rgba(247,166,0,0.4)] hover:shadow-[0_0_25px_rgba(247,166,0,0.6)] transition-all transform hover:-translate-y-1 overflow-hidden">
+                        <span class="relative z-10 flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            Cotiza ¡YA!
+                        </span>
+                        <div class="absolute inset-0 h-full w-full bg-white/30 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
+                    </a>
+
+                    
+                </div>
+
+                <div class="lg:hidden flex items-center">
+                    <button onclick="toggleMobileMenu()" class="text-white hover:text-zolaris-yellow focus:outline-none p-2 rounded-md hover:bg-white/10 transition-colors">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden lg:hidden bg-zolaris-navy/95 backdrop-blur-xl border-t border-slate-700 absolute w-full left-0 top-24 shadow-2xl transition-all duration-300 origin-top transform scale-y-0 opacity-0">
+            <div class="px-4 pt-4 pb-8 space-y-2">
+                <a href="index.html" class="block px-4 py-3 rounded-lg text-base font-medium text-white bg-white/10">Inicio</a>
+                <a href="nosotros.html" class="block px-4 py-3 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-white/5">Nuestra Historia</a>
+                <a href="proyectos.html" class="block px-4 py-3 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-white/5">Proyectos</a>
+                <a href="servicios.html" class="block px-4 py-3 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-white/5">Servicios</a>
+                <a href="zolaris-token.html" class="mt-4 relative group w-full flex items-center justify-center gap-3 px-4 py-4 rounded-xl 
+                        bg-[#0B2B46]/60 border border-cyan-500/50 backdrop-blur-md
+                        text-cyan-400 font-bold text-lg tracking-wide
+                        shadow-[0_0_10px_rgba(34,211,238,0.1)]
+                        transition-all duration-300 ease-out
+                        active:scale-95 active:bg-cyan-950/50 active:shadow-[0_0_20px_rgba(34,211,238,0.4)]">
+                    
+                    <span class="relative flex h-3 w-3">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
+                    </span>
+
+                    <span class="relative z-10 drop-shadow-[0_0_5px_rgba(34,211,238,0.8)]">
+                        Zolaris Token
+                    </span>
+                    
+                    <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500/0 via-cyan-500/5 to-cyan-500/0 opacity-50"></div>
+                </a>
+                
+                <a href="calculadora.html" class="block mt-4 px-4 py-4 rounded-xl text-center text-base font-bold text-zolaris-navy bg-gradient-to-r from-zolaris-yellow to-zolaris-orange">
+                    Cotiza ¡YA!
+                </a>
+                
+                
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        <div class="absolute inset-0 bg-zolaris-dark">
+            <div class="absolute inset-0 bg-grid-slate bg-[size:60px_60px] opacity-[0.05]"></div>
+            <div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-zolaris-blue/20 rounded-full blur-[120px] animate-pulse-slow"></div>
+            <div class="absolute bottom-0 right-0 w-[600px] h-[600px] bg-zolaris-cyan/10 rounded-full blur-[100px]"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-zolaris-cyan/30 bg-zolaris-cyan/5 backdrop-blur-md mb-8 reveal">
+                <svg class="w-4 h-4 text-zolaris-cyan" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zm0 9l2.5-1.25L12 8.5l-2.5 1.25L12 11zm0 2.5l-5-2.5-5 2.5L12 22l10-8.5-5-2.5-5 2.5z"/></svg>
+                <span class="text-zolaris-cyan font-mono text-xs uppercase tracking-widest">Energy Web 3.0 Protocol</span>
+            </div>
+
+            <h1 class="text-5xl md:text-8xl font-extrabold text-white mb-8 tracking-tight reveal" style="transition-delay: 100ms;">
+                La Energía <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-zolaris-orange via-zolaris-yellow to-zolaris-cyan text-glow">Tokenizada</span>
+            </h1>
+
+            <p class="text-xl md:text-2xl text-slate-400 max-w-3xl mx-auto font-light leading-relaxed mb-12 reveal" style="transition-delay: 200ms;">
+                Democratizamos el acceso a la energía solar. Un ecosistema dual diseñado para <strong class="text-white">clientes</strong> que buscan beneficios y para <strong class="text-white">inversionistas</strong> que buscan rentabilidad real (RWA).
+            </p>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-6 reveal" style="transition-delay: 300ms;">
+                <a href="#dual-model" class="px-8 py-4 bg-zolaris-orange text-zolaris-navy font-bold text-lg rounded-xl hover:bg-white transition-colors shadow-[0_0_30px_rgba(247,166,0,0.3)] flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    Explorar Modelo
+                </a>
+                <a href="#dashboard-access" class="px-8 py-4 border border-slate-600 text-white font-bold text-lg rounded-xl hover:border-zolaris-cyan hover:text-zolaris-cyan transition-all flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Dashboard Inversionista
+                </a>
+            </div>
+
+            
+        </div>
+    </header>
+
+    <section class="py-24 bg-zolaris-dark relative border-y border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                <div class="space-y-8 reveal">
+                    <span class="text-zolaris-cyan font-mono text-sm tracking-widest uppercase">El Desafío</span>
+                    <h2 class="text-4xl md:text-5xl font-bold text-white">¿Por qué Tokenizar la Energía?</h2>
+                    <p class="text-slate-400 text-lg leading-relaxed">
+                        Tradicionalmente, invertir en energía solar requería grandes capitales, techos propios y trámites complejos. Para los usuarios, la fidelización era inexistente.
+                    </p>
+                    <p class="text-slate-400 text-lg leading-relaxed">
+                        En Zolaris rompemos esa barrera. Usamos <strong>Blockchain</strong> para crear transparencia, liquidez y acceso. No mezclamos peras con manzanas: separamos la utilidad del usuario de la inversión financiera seria.
+                    </p>
+                    
+                    <ul class="space-y-4 pt-4">
+                        <li class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-zolaris-orange/10 flex items-center justify-center text-zolaris-orange border border-zolaris-orange/20">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                            </div>
+                            <span class="text-white">Acceso democratizado (Fracciones de proyectos)</span>
+                        </li>
+                        <li class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-zolaris-cyan/10 flex items-center justify-center text-zolaris-cyan border border-zolaris-cyan/20">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <span class="text-white">Transparencia inmutable (Blockchain)</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="relative reveal">
+                    <div class="absolute inset-0 bg-zolaris-cyan/20 blur-[100px] rounded-full"></div>
+                    <div class="relative grid grid-cols-2 gap-4">
+                        <div class="crypto-card p-6 rounded-2xl border border-slate-700 h-64 flex flex-col justify-between transform hover:-translate-y-2 transition-transform duration-500">
+                            <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-zolaris-orange to-yellow-500 flex items-center justify-center">
+                                <span class="text-2xl font-bold text-zolaris-navy">Z</span>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-bold text-xl">ZOL Token</h4>
+                                <p class="text-slate-400 text-sm mt-2">Para la comunidad y clientes.</p>
+                            </div>
+                        </div>
+                        <div class="crypto-card p-6 rounded-2xl border border-slate-700 h-64 flex flex-col justify-between mt-12 transform hover:-translate-y-2 transition-transform duration-500">
+                            <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-zolaris-blue to-zolaris-cyan flex items-center justify-center">
+                                <span class="text-2xl font-bold text-white">$</span>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-bold text-xl">ZOL-PPA</h4>
+                                <p class="text-slate-400 text-sm mt-2">Respaldado en activos reales.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="dual-model" class="py-24 bg-[#081624] relative overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-px h-full bg-gradient-to-b from-transparent via-slate-700 to-transparent hidden md:block"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-20 reveal">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">Un Ecosistema, Dos Propósitos</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">
+                    Hemos separado elegantemente la utilidad de la inversión para ofrecer claridad y cumplimiento normativo.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
+                
+                <div class="reveal group">
+                    <div class="relative p-1 rounded-3xl bg-gradient-to-br from-zolaris-orange/50 to-transparent hover:from-zolaris-orange transition-all duration-500">
+                        <div class="bg-zolaris-dark p-8 rounded-[22px] h-full relative overflow-hidden">
+                            <div class="absolute top-0 right-0 p-6 opacity-20">
+                                <svg class="w-32 h-32 text-zolaris-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            </div>
+                            
+                            <div class="flex items-center gap-4 mb-6">
+                                <span class="px-3 py-1 bg-zolaris-orange/20 text-zolaris-orange text-xs font-bold uppercase rounded-full border border-zolaris-orange/30">Utility Token</span>
+                                <h3 class="text-3xl font-mono font-bold text-white">ZOL</h3>
+                            </div>
+                            
+                            <p class="text-slate-300 mb-8 text-lg min-h-[80px]">
+                                El corazón de nuestra comunidad. Diseñado para clientes Zolaris y entusiastas de la energía verde. Sin riesgo financiero, pura utilidad.
+                            </p>
+
+                            <ul class="space-y-6">
+                                <li class="flex items-start gap-4">
+                                    <div class="p-2 rounded-lg bg-slate-800 text-zolaris-orange"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path></svg></div>
+                                    <div>
+                                        <h4 class="text-white font-bold">Descuentos en O&M</h4>
+                                        <p class="text-slate-400 text-sm">Paga mantenimientos y upgrades de tu sistema con ZOL y obtén hasta un 20% off.</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-4">
+                                    <div class="p-2 rounded-lg bg-slate-800 text-zolaris-orange"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+                                    <div>
+                                        <h4 class="text-white font-bold">Gamificación</h4>
+                                        <p class="text-slate-400 text-sm">Gana ZOL por cada kWh generado, por referir amigos o por completar retos sostenibles.</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-4">
+                                    <div class="p-2 rounded-lg bg-slate-800 text-zolaris-orange"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg></div>
+                                    <div>
+                                        <h4 class="text-white font-bold">Acceso Premium</h4>
+                                        <p class="text-slate-400 text-sm">Soporte prioritario y acceso a eventos exclusivos de la comunidad.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal group" style="transition-delay: 200ms;">
+                    <div class="relative p-1 rounded-3xl bg-gradient-to-br from-zolaris-cyan/50 to-transparent hover:from-zolaris-cyan transition-all duration-500">
+                        <div class="bg-zolaris-dark p-8 rounded-[22px] h-full relative overflow-hidden">
+                            <div class="absolute top-0 right-0 p-6 opacity-20">
+                                <svg class="w-32 h-32 text-zolaris-cyan" fill="currentColor" viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
+                            </div>
+                            
+                            <div class="flex items-center gap-4 mb-6">
+                                <span class="px-3 py-1 bg-zolaris-cyan/20 text-zolaris-cyan text-xs font-bold uppercase rounded-full border border-zolaris-cyan/30">Security Token / RWA</span>
+                                <h3 class="text-3xl font-mono font-bold text-white">ZOL-PPA</h3>
+                            </div>
+                            
+                            <p class="text-slate-300 mb-8 text-lg min-h-[80px]">
+                                El vehículo de inversión serio. Representa derechos económicos sobre activos físicos reales (Paneles solares instalados y operando).
+                            </p>
+
+                            <ul class="space-y-6">
+                                <li class="flex items-start gap-4">
+                                    <div class="p-2 rounded-lg bg-slate-800 text-zolaris-cyan"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg></div>
+                                    <div>
+                                        <h4 class="text-white font-bold">Respaldo Físico (RWA)</h4>
+                                        <p class="text-slate-400 text-sm">Cada token está vinculado a contratos PPA (Power Purchase Agreement) de proyectos reales.</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-4">
+                                    <div class="p-2 rounded-lg bg-slate-800 text-zolaris-cyan"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+                                    <div>
+                                        <h4 class="text-white font-bold">Cumplimiento & KYC</h4>
+                                        <p class="text-slate-400 text-sm">Requiere "Wallet Verificada" y proceso KYC (Know Your Customer) para garantizar legalidad.</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-4">
+                                    <div class="p-2 rounded-lg bg-slate-800 text-zolaris-cyan"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+                                    <div>
+                                        <h4 class="text-white font-bold">Dividendos Mensuales</h4>
+                                        <p class="text-slate-400 text-sm">Recibe distribuciones de la venta de energía directamente en tu wallet (USDC/COP).</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-slate-900 border-y border-slate-800">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16 reveal">
+                <span class="text-zolaris-purple font-mono font-bold tracking-widest text-sm">EL FLUJO DE VALOR</span>
+                <h2 class="text-4xl font-bold text-white mt-2">¿Cómo funciona el Ecosistema Zolaris?</h2>
+            </div>
+
+            <div class="relative">
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-gradient-to-r from-zolaris-orange via-zolaris-blue to-zolaris-cyan transform -translate-y-1/2 opacity-20"></div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    
+                    <div class="relative bg-slate-800 p-6 rounded-2xl border border-slate-700 hover:border-zolaris-purple transition-all group reveal text-center">
+                        <div class="w-16 h-16 mx-auto bg-slate-700 rounded-full flex items-center justify-center mb-4 relative z-10 border-4 border-slate-900 group-hover:border-zolaris-purple transition-colors">
+                            <span class="text-2xl">💰</span>
+                        </div>
+                        <h4 class="text-white font-bold mb-2">1. Inversión</h4>
+                        <p class="text-slate-400 text-sm">Inversores compran ZOL-PPA usando COP o Stablecoins. El capital entra al SPV (Vehículo de Propósito Especial).</p>
+                    </div>
+
+                    <div class="relative bg-slate-800 p-6 rounded-2xl border border-slate-700 hover:border-zolaris-orange transition-all group reveal text-center" style="transition-delay: 100ms;">
+                        <div class="w-16 h-16 mx-auto bg-slate-700 rounded-full flex items-center justify-center mb-4 relative z-10 border-4 border-slate-900 group-hover:border-zolaris-orange transition-colors">
+                            <span class="text-2xl">☀️</span>
+                        </div>
+                        <h4 class="text-white font-bold mb-2">2. Generación</h4>
+                        <p class="text-slate-400 text-sm">Zolaris instala proyectos solares reales. Estos generan energía limpia y ahorros para los clientes finales.</p>
+                    </div>
+
+                    <div class="relative bg-slate-800 p-6 rounded-2xl border border-slate-700 hover:border-zolaris-yellow transition-all group reveal text-center" style="transition-delay: 200ms;">
+                        <div class="w-16 h-16 mx-auto bg-slate-700 rounded-full flex items-center justify-center mb-4 relative z-10 border-4 border-slate-900 group-hover:border-zolaris-yellow transition-colors">
+                            <span class="text-2xl">🎮</span>
+                        </div>
+                        <h4 class="text-white font-bold mb-2">3. Gamificación</h4>
+                        <p class="text-slate-400 text-sm">Los clientes ganan ZOL tokens por usar energía limpia, que usan para obtener descuentos en su mantenimiento.</p>
+                    </div>
+
+                    <div class="relative bg-slate-800 p-6 rounded-2xl border border-slate-700 hover:border-zolaris-cyan transition-all group reveal text-center" style="transition-delay: 300ms;">
+                        <div class="w-16 h-16 mx-auto bg-slate-700 rounded-full flex items-center justify-center mb-4 relative z-10 border-4 border-slate-900 group-hover:border-zolaris-cyan transition-colors">
+                            <span class="text-2xl">📈</span>
+                        </div>
+                        <h4 class="text-white font-bold mb-2">4. Retorno</h4>
+                        <p class="text-slate-400 text-sm">El pago de la energía genera flujos de caja que se distribuyen automáticamente a los holders de ZOL-PPA.</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-zolaris-dark relative overflow-hidden">
+        <div class="absolute right-0 bottom-0 w-1/3 h-full bg-gradient-to-l from-zolaris-blue/10 to-transparent"></div>
+
+        <div class="max-w-5xl mx-auto px-4 relative z-10">
+            <h2 class="text-4xl font-bold text-white mb-12 text-center reveal">Roadmap del Token</h2>
+            
+            <div class="space-y-8">
+                <div class="flex flex-col md:flex-row gap-6 reveal">
+                    <div class="md:w-32 flex-shrink-0 text-zolaris-cyan font-mono font-bold pt-2">FASE 1 <br> <span class="text-xs text-slate-500">Q2 2026</span></div>
+                    <div class="flex-grow bg-slate-800/50 p-6 rounded-xl border-l-4 border-zolaris-cyan">
+                        <h3 class="text-xl font-bold text-white mb-2">Lanzamiento ZOL (Beta)</h3>
+                        <p class="text-slate-400 text-sm">Implementación del programa de fidelización para clientes actuales. Integración en la App móvil para visualización de puntos y recompensas básicas.</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-6 reveal">
+                    <div class="md:w-32 flex-shrink-0 text-zolaris-purple font-mono font-bold pt-2">FASE 2 <br> <span class="text-xs text-slate-500">Q4 2026</span></div>
+                    <div class="flex-grow bg-slate-800/50 p-6 rounded-xl border-l-4 border-zolaris-purple">
+                        <h3 class="text-xl font-bold text-white mb-2">Estructuración ZOL-PPA</h3>
+                        <p class="text-slate-400 text-sm">Constitución legal del SPV y diseño del Smart Contract para la tokenización de activos. Inicio de registro en lista blanca (Whitelist) para inversores calificados.</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-6 reveal">
+                    <div class="md:w-32 flex-shrink-0 text-zolaris-orange font-mono font-bold pt-2">FASE 3 <br> <span class="text-xs text-slate-500">2027</span></div>
+                    <div class="flex-grow bg-slate-800/50 p-6 rounded-xl border-l-4 border-zolaris-orange">
+                        <h3 class="text-xl font-bold text-white mb-2">Mercado Secundario & Expansión</h3>
+                        <p class="text-slate-400 text-sm">Lanzamiento del marketplace interno para intercambio de tokens ZOL. Primera distribución de dividendos ZOL-PPA. Expansión del modelo a otros departamentos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-[#05121e]">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-white text-center mb-12 reveal">Preguntas Frecuentes Web3</h2>
+            
+            <div class="space-y-4 reveal">
+                <details class="group bg-slate-900 rounded-xl border border-slate-800 open:border-zolaris-cyan/50 transition-colors">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-6">
+                        <span class="text-white">¿Es legal invertir en ZOL-PPA en Colombia?</span>
+                        <span class="transition group-open:rotate-180 text-zolaris-cyan">
+                            <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="text-slate-400 px-6 pb-6 text-sm leading-relaxed">
+                        Sí. ZOL-PPA no es una criptomoneda especulativa, es un valor tokenizado (Security Token) que representa derechos fiduciarios sobre un contrato real. Operamos bajo el marco del Sandbox regulatorio o mediante figuras de derechos fiduciarios estándar, cumpliendo con toda la normativa KYC/AML vigente.
+                    </div>
+                </details>
+
+                <details class="group bg-slate-900 rounded-xl border border-slate-800 open:border-zolaris-cyan/50 transition-colors">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-6">
+                        <span class="text-white">¿Necesito saber de Blockchain para usar ZOL?</span>
+                        <span class="transition group-open:rotate-180 text-zolaris-cyan">
+                            <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="text-slate-400 px-6 pb-6 text-sm leading-relaxed">
+                        Para nada. El token ZOL (Utilidad) funciona como puntos de fidelización en nuestra App. Nosotros manejamos la complejidad técnica por detrás ("Account Abstraction"). Tú solo ves tus puntos y beneficios.
+                    </div>
+                </details>
+
+                <details class="group bg-slate-900 rounded-xl border border-slate-800 open:border-zolaris-cyan/50 transition-colors">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-6">
+                        <span class="text-white">¿Qué pasa si el precio de Bitcoin cae?</span>
+                        <span class="transition group-open:rotate-180 text-zolaris-cyan">
+                            <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="text-slate-400 px-6 pb-6 text-sm leading-relaxed">
+                        El valor de ZOL-PPA no depende del mercado crypto, sino del rendimiento de los paneles solares y el pago de las facturas de energía (en Pesos Colombianos). Es un activo del mundo real (RWA) desligado de la volatilidad de Bitcoin.
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <section id="dashboard-access" class="py-24 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-zolaris-navy to-zolaris-dark"></div>
+        <div class="absolute inset-0 bg-grid-slate bg-[size:30px_30px] opacity-20"></div>
+        
+        <div class="relative z-10 max-w-4xl mx-auto px-4 text-center">
+            <div class="inline-block p-4 rounded-full bg-slate-800/50 border border-slate-600 mb-8 animate-float">
+                <svg class="w-16 h-16 text-zolaris-cyan mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path></svg>
+            </div>
+            
+            <h2 class="text-4xl md:text-6xl font-bold text-white mb-6">El Dashboard Zolaris</h2>
+            <p class="text-xl text-slate-300 mb-10">
+                La plataforma central donde convergen la gestión de energía y tus inversiones. Compra tokens, revisa tu producción en tiempo real y gestiona tu wallet.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="dashboard-web3.html" class="px-10 py-5 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-lg rounded-xl hover:shadow-[0_0_40px_rgba(6,182,212,0.6)] transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3 cursor-pointer">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                    Conectar Wallet & Entrar
+                </a>
+                
+            </div>
+            <p class="mt-6 text-slate-500 text-sm font-mono">
+                Soporta: MetaMask, WalletConnect, Coinbase Wallet
+            </p>
+        </div>
+    </section>
+
+    <footer class="bg-zolaris-navy text-slate-300 pt-20 pb-10 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                <div class="space-y-4">
+                    <img src="/zolaris-web/assets/logo.png" alt="Zolaris" class="h-16 brightness-0 invert">
+                    <p class="text-sm leading-relaxed max-w-xs">
+                        El futuro de la energía es solar. Acompañamos tu transición energética con tecnología, confianza y excelencia.
+                    </p>
+                    <div class="flex gap-4 pt-2">
+                        <a href="https://www.instagram.com/zolarisingenieria/" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-zolaris-orange hover:text-white transition-all"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-white font-bold mb-6">Navegación</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="index.html" class="hover:text-zolaris-orange transition-colors">Inicio</a></li>
+                        <li><a href="nosotros.html" class="hover:text-zolaris-orange transition-colors">Nuestra Historia</a></li>
+                        <li><a href="proyectos.html" class="hover:text-zolaris-orange transition-colors">Portafolio</a></li>
+                        <li><a href="calculadora.html" class="hover:text-zolaris-orange transition-colors">Calculadora Solar</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-white font-bold mb-6">Legal</h3>
+                    <ul class="space-y-3 text-sm cursor-pointer">
+                        <li><span onclick="openModal('modal-privacidad')" class="hover:text-zolaris-orange transition-colors">Política de Privacidad</span></li>
+                        <li><span onclick="openModal('modal-terminos')" class="hover:text-zolaris-orange transition-colors">Términos y Condiciones</span></li>
+                        <li><span onclick="openModal('modal-datos')" class="hover:text-zolaris-orange transition-colors">Tratamiento de Datos</span></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-white font-bold mb-6">Contacto</h3>
+                    <ul class="space-y-4 text-sm">
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-zolaris-orange mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            <span>Cra. 37 #19b-35. Oficina 1005. Pasto, Nariño<br>Colombia</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-zolaris-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            <span>tramites.zolaris@gmail.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500">
+                <p>&copy; 2026 Zolaris Ingeniería S.A.S. Todos los derechos reservados.</p>
+                <p>Desarrollado por Ivan Andres Zuñiga</p>
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/573205293939?text=Hola%20Zolaris,%20me%20gustar%C3%ADa%20saber%20m%C3%A1s%20informaci%C3%B3n%20sobre%20paneles%20solares" 
+        target="_blank" 
+        class="fixed bottom-6 right-6 z-50 bg-[#25D366] w-16 h-16 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_0_20px_rgba(37,211,102,0.6)] group"
+        aria-label="Contactar por WhatsApp">
+            
+            <svg class="w-9 h-9 text-white fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+            </svg>
+            
+            <span class="absolute inline-flex h-full w-full rounded-full bg-[#25D366] opacity-30 animate-ping -z-10"></span>
+    </a>
+
+    <div id="modal-privacidad" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeModal('modal-privacidad')"></div>
+        <div class="relative bg-slate-900 w-full max-w-2xl rounded-2xl p-8 border border-slate-700 shadow-2xl max-h-[80vh] overflow-y-auto">
+            <h3 class="text-2xl font-bold text-white mb-4">Política de Privacidad</h3>
+            <div class="text-slate-300 space-y-4 text-sm">
+                <p>En Zolaris Ingeniería S.A.S., valoramos su privacidad y estamos comprometidos con la protección de sus datos personales. Esta política describe cómo recopilamos, usamos y protegemos la información que usted nos proporciona a través de nuestro sitio web y servicios.</p>
+                <p>Recopilamos información personal básica, como nombre, correo electrónico y número de teléfono, únicamente cuando usted la proporciona voluntariamente a través de nuestros formularios de contacto o la calculadora solar. Estos datos se utilizan exclusivamente para brindarle la información solicitada, elaborar cotizaciones y mejorar nuestros servicios.</p>
+                <p>Zolaris no vende, alquila ni comparte su información personal con terceros con fines comerciales. Solo compartiremos sus datos si es necesario para cumplir con una obligación legal o para la ejecución de un contrato de servicio con usted (por ejemplo, trámites ante operadores de red).</p>
+                <p>Implementamos medidas de seguridad técnicas y organizativas para proteger sus datos contra el acceso no autorizado, la alteración o la destrucción. Sin embargo, recuerde que ninguna transmisión por Internet es 100% segura.</p>
+                <p>Usted tiene derecho a acceder, corregir o solicitar la eliminación de sus datos personales en cualquier momento contactándonos a través de nuestros canales oficiales.</p>
+            </div>
+            <button onclick="closeModal('modal-privacidad')" class="mt-6 px-6 py-2 bg-zolaris-orange text-zolaris-navy font-bold rounded-lg hover:bg-white transition-colors">Cerrar</button>
+        </div>
+    </div>
+
+    <div id="modal-terminos" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeModal('modal-terminos')"></div>
+        <div class="relative bg-slate-900 w-full max-w-2xl rounded-2xl p-8 border border-slate-700 shadow-2xl max-h-[80vh] overflow-y-auto">
+            <h3 class="text-2xl font-bold text-white mb-4">Términos y Condiciones</h3>
+            <div class="text-slate-300 space-y-4 text-sm">
+                <p>Bienvenido al sitio web de Zolaris Ingeniería S.A.S. Al acceder y utilizar este sitio, usted acepta cumplir con los siguientes términos y condiciones. Si no está de acuerdo con alguna parte de estos términos, le recomendamos no utilizar nuestros servicios.</p>
+                <p>El contenido de este sitio web, incluyendo textos, imágenes, logotipos y herramientas (como la calculadora solar), es propiedad de Zolaris o de sus licenciantes y está protegido por las leyes de propiedad intelectual. Queda prohibida su reproducción total o parcial sin autorización expresa.</p>
+                <p>Las estimaciones proporcionadas por nuestra calculadora solar son aproximadas y se basan en promedios estadísticos. No constituyen una oferta vinculante ni garantizan ahorros exactos, ya que estos dependen de factores variables como la ubicación exacta, el clima y los hábitos de consumo.</p>
+                <p>Zolaris se reserva el derecho de modificar, suspender o interrumpir cualquier aspecto del servicio en cualquier momento sin previo aviso. No nos hacemos responsables por daños directos o indirectos derivados del uso o la imposibilidad de uso de este sitio web.</p>
+                <p>Cualquier disputa relacionada con estos términos se regirá por las leyes de la República de Colombia y se someterá a la jurisdicción de los tribunales de Pasto, Nariño.</p>
+            </div>
+            <button onclick="closeModal('modal-terminos')" class="mt-6 px-6 py-2 bg-zolaris-orange text-zolaris-navy font-bold rounded-lg hover:bg-white transition-colors">Cerrar</button>
+        </div>
+    </div>
+
+    <div id="modal-datos" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeModal('modal-datos')"></div>
+        <div class="relative bg-slate-900 w-full max-w-2xl rounded-2xl p-8 border border-slate-700 shadow-2xl max-h-[80vh] overflow-y-auto">
+            <h3 class="text-2xl font-bold text-white mb-4">Tratamiento de Datos</h3>
+            <div class="text-slate-300 space-y-4 text-sm">
+                <p>En cumplimiento de la Ley 1581 de 2012 y el Decreto 1377 de 2013, Zolaris Ingeniería S.A.S. informa a los titulares de datos personales que la información recolectada será tratada de acuerdo con nuestra Política de Tratamiento de Datos.</p>
+                <p>La recolección de datos tiene como finalidad principal la gestión administrativa, comercial y operativa necesaria para la prestación de nuestros servicios de energía solar. Esto incluye el envío de cotizaciones, información técnica y actualizaciones sobre proyectos.</p>
+                <p>Como titular de los datos, usted tiene derecho a conocer, actualizar y rectificar su información personal, así como a revocar la autorización otorgada para su tratamiento en los casos previstos por la ley.</p>
+                <p>Zolaris garantiza la confidencialidad y seguridad de la información, adoptando las medidas necesarias para evitar su adulteración, pérdida, consulta, uso o acceso no autorizado o fraudulento.</p>
+                <p>Para ejercer sus derechos de Habeas Data, puede contactarnos a través del correo electrónico tramites.zolaris@gmail.com o en nuestra oficina física en Pasto, Nariño.</p>
+            </div>
+            <button onclick="closeModal('modal-datos')" class="mt-6 px-6 py-2 bg-zolaris-orange text-zolaris-navy font-bold rounded-lg hover:bg-white transition-colors">Cerrar</button>
+        </div>
+    </div>
+
+    
+</body>
+</html>

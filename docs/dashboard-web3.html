@@ -1,0 +1,1984 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zolaris Dashboard | Panel Web3 Inversionista</title>
+    <meta name="description" content="Panel de control Web3 de Zolaris. Conecta tu wallet MetaMask, visualiza tus balances reales en BSC y gestiona tus tokens ZOL." />
+    <link rel="icon" type="image/png" href="/zolaris-web/assets/logo.png" />
+    <link rel="manifest" href="/zolaris-web/manifest.json" />
+    <meta name="theme-color" content="#0B2B46" />
+    <link rel="apple-touch-icon" href="/zolaris-web/assets/logo.png" />
+    <link rel="canonical" href="https://zolarisingenieria.com/dashboard-web3.html" />
+    <meta property="og:title" content="Zolaris Dashboard | Web3 Real" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://zolarisingenieria.com/dashboard-web3.html" />
+    <meta property="og:locale" content="es_CO" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Librerías Web3 y UI -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Driver.js para Tutorial interactivo -->
+    <script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.js.iife.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css"/>
+
+
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            background-color: #050e1a;
+            color: #f1f5f9;
+            font-family: 'Manrope', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+        }
+
+        /* ── Sidebar ── */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #07182b 0%, #050e1a 100%);
+            border-right: 1px solid rgba(6,182,212,0.1);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            z-index: 20;
+        }
+        .sidebar-logo {
+            height: 80px;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            gap: 12px;
+        }
+        .sidebar-logo span {
+            font-size: 18px;
+            font-weight: 800;
+            background: linear-gradient(to right, #06b6d4, #F7A600);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-section-label {
+            padding: 20px 24px 8px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #475569;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            cursor: pointer;
+            color: #64748b;
+            font-size: 14px;
+            font-weight: 500;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        .nav-item:hover { background: rgba(6,182,212,0.05); color: #94a3b8; border-left-color: rgba(6,182,212,0.3); }
+        .nav-item.active { background: rgba(6,182,212,0.1); color: #e2e8f0; border-left-color: #06b6d4; font-weight: 700; }
+        .nav-item .nav-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; background: rgba(255,255,255,0.03); flex-shrink: 0; }
+        .nav-item.active .nav-icon { background: rgba(6,182,212,0.15); }
+
+        /* ── Main ── */
+        .main-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .topbar {
+            height: 72px;
+            background: rgba(5,14,26,0.95);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            flex-shrink: 0;
+            backdrop-filter: blur(12px);
+        }
+        .topbar-title { font-size: 20px; font-weight: 700; color: white; }
+        .content-area { flex: 1; overflow-y: auto; padding: 32px; }
+
+        /* ── Cards ── */
+        .card {
+            background: linear-gradient(145deg, #0d1f32, #07121e);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 20px;
+            padding: 24px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .card:hover { border-color: rgba(6,182,212,0.2); box-shadow: 0 8px 32px rgba(6,182,212,0.07); }
+        .card-accent-cyan { border-top: 3px solid #06b6d4; }
+        .card-accent-orange { border-top: 3px solid #F7A600; }
+        .card-accent-green { border-top: 3px solid #10B981; }
+
+        /* ── Stat Numbers ── */
+        .stat-value { font-size: 36px; font-weight: 800; font-family: 'Space Grotesk', monospace; line-height: 1; }
+        .stat-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #64748b; margin-bottom: 8px; }
+
+        /* ── Wallet Button ── */
+        #connect-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #0ea5e9, #0369a1);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(6,182,212,0.3);
+        }
+        #connect-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(6,182,212,0.5); }
+        #connect-btn.connected {
+            background: linear-gradient(135deg, #064e3b, #065f46);
+            box-shadow: 0 4px 15px rgba(16,185,129,0.3);
+        }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+        .status-connected { background: #10B981; box-shadow: 0 0 8px #10B981; animation: pulse-green 2s infinite; }
+        .status-disconnected { background: #ef4444; }
+        @keyframes pulse-green { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        /* ── Network Badge ── */
+        .network-badge {
+            display: flex; align-items: center; gap: 6px;
+            background: rgba(247,166,0,0.1);
+            border: 1px solid rgba(247,166,0,0.3);
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #F7A600;
+        }
+
+        /* ── Views ── */
+        .view { display: none; animation: fadeIn 0.4s ease; }
+        .view.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ── Progress Bars ── */
+        .progress-track { background: rgba(255,255,255,0.07); border-radius: 8px; height: 8px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 8px; transition: width 0.6s ease; }
+
+        /* ── Token Price Ticker ── */
+        .ticker {
+            background: rgba(6,182,212,0.05);
+            border: 1px solid rgba(6,182,212,0.1);
+            border-radius: 12px;
+            padding: 12px 20px;
+            display: flex; align-items: center; gap: 16px;
+        }
+
+        /* ── Mobile ── */
+        #mobile-menu-btn { display: none; }
+        @media (max-width: 768px) {
+            .sidebar { position: fixed; left: -260px; top: 0; height: 100%; transition: left 0.3s ease; z-index: 100; }
+            .sidebar.open { left: 0; }
+            #mobile-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 99; }
+            #mobile-overlay.open { display: block; }
+            #mobile-menu-btn { display: flex; }
+            .content-area { padding: 20px 16px; }
+            .topbar { padding: 0 20px; }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050e1a; }
+        ::-webkit-scrollbar-thumb { background: #1e3a5f; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+
+        /* ── Gas Tracker Badge ── */
+        .gas-badge { display:flex; align-items:center; gap:6px; background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.25); border-radius:20px; padding:6px 12px; font-size:12px; font-weight:700; color:#10B981; cursor:default; transition:all 0.3s; }
+        .gas-badge.medium { background:rgba(247,166,0,0.08); border-color:rgba(247,166,0,0.25); color:#F7A600; }
+        .gas-badge.high { background:rgba(239,68,68,0.08); border-color:rgba(239,68,68,0.25); color:#ef4444; }
+
+        /* ── Level Badge ── */
+        .level-badge { display:none; align-items:center; gap:6px; background:linear-gradient(135deg,rgba(247,166,0,0.12),rgba(253,203,88,0.06)); border:1px solid rgba(247,166,0,0.3); border-radius:20px; padding:6px 14px; font-size:12px; font-weight:800; color:#F7A600; }
+        .level-badge.show { display:flex; animation:level-glow 3s ease-in-out infinite; }
+        @keyframes level-glow { 0%,100%{box-shadow:0 0 8px rgba(247,166,0,0.2);}50%{box-shadow:0 0 18px rgba(247,166,0,0.5);} }
+
+        /* ── Countdown Dividendo ── */
+        .countdown-unit { text-align:center; background:rgba(6,182,212,0.08); border:1px solid rgba(6,182,212,0.15); border-radius:12px; padding:10px 14px; min-width:58px; }
+        .countdown-number { font-size:24px; font-weight:800; font-family:'Space Grotesk',monospace; color:#06b6d4; line-height:1; }
+        .countdown-label { font-size:9px; color:#475569; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; margin-top:4px; }
+
+        /* ── Solar Glow ── */
+        .solar-glow { color:#10B981; text-shadow:0 0 20px rgba(16,185,129,0.4); font-family:'Space Grotesk',monospace; font-weight:800; font-size:32px; line-height:1; }
+
+        /* ── USDT Card ── */
+        .card-accent-usdt { border-top:3px solid #26a17b; }
+
+        /* ── Copy Toast ── */
+        #copy-toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(16px); background:rgba(16,185,129,0.95); backdrop-filter:blur(8px); color:white; padding:8px 24px; border-radius:20px; font-size:13px; font-weight:700; opacity:0; transition:all 0.3s ease; z-index:9999; pointer-events:none; white-space:nowrap; box-shadow:0 4px 20px rgba(16,185,129,0.4); }
+        #copy-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+        /* ── Sparklines ── */
+        .spark-wrap { height:30px; margin-top:8px; }
+    </style>
+  <script type="module" crossorigin src="/zolaris-web/assets/main-DHmLse3v.js"></script>
+  <link rel="stylesheet" crossorigin href="/zolaris-web/assets/main-BZCdK1r8.css">
+</head>
+<body>
+
+<!-- ══════════════════════ SIDEBAR ══════════════════════ -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+        <img src="/zolaris-web/assets/logo.png" class="h-9 w-auto" alt="Zolaris">
+        <span>Zolaris</span>
+    </div>
+
+    <nav style="flex:1; overflow-y:auto; padding: 8px 0;">
+        <p class="nav-section-label">Panel</p>
+        <a class="nav-item active" id="nav-home" onclick="showView('home')" href="#">
+            <div class="nav-icon">📊</div>
+            <span>Resumen General</span>
+        </a>
+        <a class="nav-item" id="nav-portfolio" onclick="showView('portfolio')" href="#">
+            <div class="nav-icon">💎</div>
+            <span>Mi Portafolio</span>
+        </a>
+
+        <p class="nav-section-label">Tokens</p>
+        <a class="nav-item" id="nav-buy" onclick="showView('buy')" href="#">
+            <div class="nav-icon">💱</div>
+            <span>Swap DEX</span>
+        </a>
+        <a class="nav-item" id="nav-staking" onclick="showView('staking')" href="#">
+            <div class="nav-icon">🔒</div>
+            <span>Staking ZOL</span>
+        </a>
+        <a class="nav-item" id="nav-invest" onclick="showView('invest')" href="#">
+            <div class="nav-icon">📈</div>
+            <span>Invertir ZOL-PPA</span>
+        </a>
+
+        <p class="nav-section-label">Comunidad</p>
+        <a href="#" class="nav-item" id="nav-history" onclick="showView('history')">
+            <div class="nav-icon">📜</div>
+            <span>Historial Tx</span>
+        </a>
+        <a href="#" class="nav-item" id="nav-referrals" onclick="showView('referrals')">
+            <div class="nav-icon">👥</div>
+            <span>Referidos</span>
+        </a>
+
+        <div class="nav-section-label" style="margin-top:20px; border-top: 1px solid rgba(255,255,255,0.05); padding-top:20px;">Ayuda</div>
+        <!-- Tutorial Button -->
+        <a href="#" class="nav-item" onclick="startTutorial()" style="color:#F7A600;">
+            <div class="nav-icon" style="background:rgba(247,166,0,0.15);">▶️</div>
+            <span>Tutorial Interactivo</span>
+        </a>
+    </nav>
+
+    <div style="padding: 24px;">
+        <a href="index.html" style="display:block;text-align:center;padding:12px;border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:#94a3b8;text-decoration:none;font-size:12px;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+            ← Volver al Sitio
+        </a>
+    </div>
+</aside>
+<div id="mobile-overlay" onclick="closeMobile()"></div>
+
+<!-- ══════════════════════ MAIN ══════════════════════ -->
+<div class="main-area">
+
+    <!-- Topbar -->
+    <header class="topbar">
+        <div style="display:flex;align-items:center;gap:16px;">
+            <button id="mobile-menu-btn" onclick="toggleMobile()"
+                style="background:rgba(255,255,255,0.06);border:none;padding:8px;border-radius:10px;cursor:pointer;color:white;display:flex;">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+            <h1 class="topbar-title" id="page-title">Panel de Control</h1>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+
+            <!-- Gas Tracker BSC en Vivo -->
+            <div class="gas-badge" id="gas-tracker" title="Gas Price en BSC (Gwei)">
+                ⛽ <span id="gas-gwei">--</span> Gwei
+            </div>
+
+            <!-- Level Badge (visible al conectar) -->
+            <div class="level-badge" id="level-badge">
+                ⭐ <span id="topbar-level">Explorador</span>
+            </div>
+
+            <!-- Network badge -->
+            <div class="network-badge" id="network-badge" style="display:none;">
+                <svg width="12" height="12" viewBox="0 0 32 32" fill="#F7A600"><circle cx="16" cy="16" r="16"/></svg>
+                <span id="network-name-badge">BSC</span>
+            </div>
+
+            <!-- Connect Wallet Button -->
+            <button id="connect-btn" onclick="connectWallet()">
+                <span class="status-dot status-disconnected" id="status-dot"></span>
+                <span id="wallet-label">Conectar MetaMask</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <main class="content-area">
+
+        <!-- ─────── VISTA: HOME ─────── -->
+        <div class="view active" id="view-home">
+
+            <!-- Bienvenida -->
+            <div style="background:linear-gradient(135deg,#0B2B46,#0d2f4c);border:1px solid rgba(6,182,212,0.2);border-radius:20px;padding:28px 32px;margin-bottom:28px;display:flex;justify-content:space-between;align-items:center;gap:20px;overflow:hidden;position:relative;">
+                <div style="position:absolute;right:-20px;top:-20px;width:200px;height:200px;background:radial-gradient(circle,rgba(6,182,212,0.1),transparent 70%);"></div>
+                <div>
+                    <h2 style="font-size:26px;font-weight:800;color:white;margin-bottom:6px;">Bienvenido, Inversionista ☀️</h2>
+                    <p style="color:#94a3b8;font-size:14px;" id="welcome-msg">Conecta tu wallet MetaMask para ver tus balances reales en BSC Mainnet.</p>
+                </div>
+                <div style="flex-shrink:0;display:none;" id="bnb-price-badge">
+                    <div style="background:rgba(247,166,0,0.1);border:1px solid rgba(247,166,0,0.3);border-radius:16px;padding:12px 20px;text-align:center;">
+                        <p style="font-size:10px;color:#F7A600;font-weight:700;letter-spacing:.08em;text-transform:uppercase;">Precio BNB</p>
+                        <p style="font-size:24px;font-weight:800;color:white;font-family:'Space Grotesk',monospace;" id="live-bnb-price">$0.00</p>
+                        <p style="font-size:10px;color:#64748b;">USD • Binance Live</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Grid — 4 activos -->
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:18px;margin-bottom:22px;">
+                <div class="card card-accent-cyan">
+                    <p class="stat-label">Saldo Total USD</p>
+                    <p class="stat-value" style="color:#06b6d4;">$<span id="balance-usd">0.00</span></p>
+                    <p style="font-size:12px;color:#64748b;margin-top:6px;">BNB: <span id="balance-bnb" style="color:#94a3b8;font-family:'Space Grotesk',monospace;">0.0000</span></p>
+                    <div class="spark-wrap"><canvas id="spark-bnb"></canvas></div>
+                </div>
+                <div class="card card-accent-orange">
+                    <p class="stat-label">ZOL — Utilidad</p>
+                    <p class="stat-value" style="color:#F7A600;" id="balance-zol">0</p>
+                    <p style="font-size:12px;color:#64748b;margin-top:6px;">Descuentos &amp; fidelización</p>
+                    <div class="spark-wrap"><canvas id="spark-zol"></canvas></div>
+                </div>
+                <div class="card card-accent-green">
+                    <p class="stat-label">ZOL-PPA — RWA</p>
+                    <p class="stat-value" style="color:#10B981;" id="balance-ppa">0</p>
+                    <p style="font-size:12px;color:#64748b;margin-top:6px;">Energía solar real</p>
+                    <div class="spark-wrap"><canvas id="spark-ppa"></canvas></div>
+                </div>
+                <div class="card card-accent-usdt">
+                    <p class="stat-label">USDT — BEP-20</p>
+                    <p class="stat-value" style="color:#26a17b;">$<span id="balance-usdt">0.00</span></p>
+                    <p style="font-size:12px;color:#64748b;margin-top:6px;" id="usdt-status">Conecta para leer</p>
+                    <div class="spark-wrap"><canvas id="spark-usdt"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Solar Widget + Countdown -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:22px;">
+                <!-- Solar Energy Widget -->
+                <div class="card" style="padding:22px;background:linear-gradient(145deg,#081a0b,#050e1a);border-color:rgba(16,185,129,0.2);">
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+                        <div style="width:40px;height:40px;background:rgba(16,185,129,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">☀️</div>
+                        <div style="flex:1;">
+                            <p style="font-size:10px;color:#475569;font-weight:700;text-transform:uppercase;letter-spacing:.08em;">Energía Solar Generada</p>
+                            <p style="font-size:11px;color:#10B981;display:flex;align-items:center;gap:5px;">Proyectos Zolaris <span style="width:6px;height:6px;border-radius:50%;background:#10B981;box-shadow:0 0 6px #10B981;animation:pulse-green 2s infinite;display:inline-block;"></span></p>
+                        </div>
+                    </div>
+                    <p class="solar-glow" id="solar-kwh">142,756.80</p>
+                    <p style="font-size:12px;color:#475569;margin-top:4px;">kWh totales producidos</p>
+                    <div style="margin-top:14px;display:flex;gap:10px;">
+                        <div style="flex:1;background:rgba(16,185,129,0.08);border-radius:10px;padding:8px 10px;text-align:center;">
+                            <p style="font-size:10px;color:#64748b;text-transform:uppercase;font-weight:700;margin-bottom:2px;">kWp</p>
+                            <p style="font-size:18px;font-weight:800;color:#10B981;font-family:'Space Grotesk',monospace;">30.5</p>
+                        </div>
+                        <div style="flex:1;background:rgba(16,185,129,0.08);border-radius:10px;padding:8px 10px;text-align:center;">
+                            <p style="font-size:10px;color:#64748b;text-transform:uppercase;font-weight:700;margin-bottom:2px;">CO₂ Evitado</p>
+                            <p style="font-size:18px;font-weight:800;color:#10B981;font-family:'Space Grotesk',monospace;" id="co2-avoided">19.1 t</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Countdown Próximo Dividendo PPA -->
+                <div class="card" style="padding:22px;">
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+                        <div style="width:40px;height:40px;background:rgba(6,182,212,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">⏳</div>
+                        <div>
+                            <p style="font-size:10px;color:#475569;font-weight:700;text-transform:uppercase;letter-spacing:.08em;">Próximo Dividendo PPA</p>
+                            <p style="font-size:11px;color:#06b6d4;">Pago mensual en USDT</p>
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:8px;justify-content:center;margin-bottom:14px;">
+                        <div class="countdown-unit"><div class="countdown-number" id="cd-days">00</div><div class="countdown-label">Días</div></div>
+                        <div class="countdown-unit"><div class="countdown-number" id="cd-hours">00</div><div class="countdown-label">Horas</div></div>
+                        <div class="countdown-unit"><div class="countdown-number" id="cd-mins">00</div><div class="countdown-label">Min</div></div>
+                        <div class="countdown-unit"><div class="countdown-number" id="cd-secs">00</div><div class="countdown-label">Seg</div></div>
+                    </div>
+                    <div style="padding:10px 14px;background:rgba(247,166,0,0.05);border:1px solid rgba(247,166,0,0.15);border-radius:10px;">
+                        <p style="font-size:12px;color:#94a3b8;line-height:1.6;text-align:center;">💡 Invirtiendo en <strong style="color:#F7A600;">ZOL-PPA</strong>, recibes dividendos mensuales proporcionales a la energía solar generada.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart + Ticker Row -->
+            <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;margin-bottom:28px;">
+                <div class="card" style="padding:28px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+                        <h3 style="font-weight:700;color:white;font-size:16px;">Rendimiento del Portafolio</h3>
+                        <div style="display:flex;gap:8px;">
+                            <button onclick="updateChartRange(30)" class="chart-btn active-range" id="btn-30d" style="padding:6px 12px;border-radius:8px;border:1px solid rgba(6,182,212,0.3);background:rgba(6,182,212,0.1);color:#06b6d4;font-size:12px;font-weight:700;cursor:pointer;">30D</button>
+                            <button onclick="updateChartRange(7)" class="chart-btn" id="btn-7d" style="padding:6px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#64748b;font-size:12px;font-weight:700;cursor:pointer;">7D</button>
+                        </div>
+                    </div>
+                    <div style="height:200px;">
+                        <canvas id="portfolioChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card" style="padding:24px;">
+                    <h3 style="font-weight:700;color:white;font-size:14px;margin-bottom:16px;">Precios en Vivo</h3>
+                    <div style="space-y:12px;display:flex;flex-direction:column;gap:12px;">
+                        <div class="ticker">
+                            <div style="width:32px;height:32px;background:#F3BA2F;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#000;flex-shrink:0;">B</div>
+                            <div style="flex:1;">
+                                <p style="font-size:11px;color:#64748b;font-weight:700;">BNB/USDT</p>
+                                <p style="font-size:16px;font-weight:800;color:white;font-family:'Space Grotesk',monospace;" id="price-bnb-card">--</p>
+                            </div>
+                            <span id="change-bnb" style="font-size:12px;font-weight:700;color:#10B981;">--</span>
+                        </div>
+                        <div class="ticker">
+                            <div style="width:32px;height:32px;background:linear-gradient(135deg,#F7A600,#FDCB58);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#0B2B46;flex-shrink:0;">ZOL</div>
+                            <div style="flex:1;">
+                                <p style="font-size:11px;color:#64748b;font-weight:700;">ZOL (Utility)</p>
+                                <p style="font-size:16px;font-weight:800;color:white;font-family:'Space Grotesk',monospace;">$0.05</p>
+                            </div>
+                            <span style="font-size:12px;font-weight:700;color:#10B981;">+2.4%</span>
+                        </div>
+                        <div class="ticker">
+                            <div style="width:32px;height:32px;background:linear-gradient(135deg,#06b6d4,#0ea5e9);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:white;flex-shrink:0;">PPA</div>
+                            <div style="flex:1;">
+                                <p style="font-size:11px;color:#64748b;font-weight:700;">ZOL-PPA (RWA)</p>
+                                <p style="font-size:16px;font-weight:800;color:white;font-family:'Space Grotesk',monospace;">$1.20</p>
+                            </div>
+                            <span style="font-size:12px;font-weight:700;color:#10B981;">+0.8%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wallet Address Section -->
+            <div class="card" id="wallet-info-card" style="display:none;">
+                <h3 style="font-weight:700;color:white;margin-bottom:16px;font-size:14px;">🔐 Detalles de Conexión</h3>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;">
+                    <div>
+                        <p style="font-size:11px;color:#64748b;margin-bottom:6px;">DIRECCIÓN CONECTADA</p>
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <p id="wallet-full-address" style="flex:1;font-family:'Space Grotesk',monospace;font-size:12px;color:#06b6d4;background:rgba(6,182,212,0.06);padding:10px 14px;border-radius:10px;word-break:break-all;border:1px solid rgba(6,182,212,0.15);">--</p>
+                            <button onclick="copyAddress()" id="copy-addr-btn" title="Copiar dirección" style="flex-shrink:0;background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);color:#06b6d4;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:16px;transition:all 0.2s;" onmouseover="this.style.background='rgba(6,182,212,0.22)'" onmouseout="this.style.background='rgba(6,182,212,0.1)'">📋</button>
+                        </div>
+                    </div>
+                    <div>
+                        <p style="font-size:11px;color:#64748b;margin-bottom:6px;">RED ACTIVA</p>
+                        <p id="network-full" style="font-family:'Space Grotesk',monospace;font-size:13px;color:#10B981;background:rgba(16,185,129,0.06);padding:10px 14px;border-radius:10px;border:1px solid rgba(16,185,129,0.15);">--</p>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:20px;margin-top:14px;flex-wrap:wrap;">
+                    <a id="bscscan-link" href="#" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#F7A600;text-decoration:none;font-weight:600;">
+                        Ver en BscScan ↗
+                    </a>
+                    <span style="font-size:13px;color:#26a17b;font-weight:600;">💵 USDT: <span id="usdt-wallet-detail">0.00</span></span>
+                    <span style="font-size:13px;color:#10B981;font-weight:600;">⛽ Gas: <span id="gas-detail-val">--</span> Gwei</span>
+                </div>
+            </div>
+
+            <!-- Social Proof Bar -->
+            <div style="margin-top:18px;padding:12px 20px;background:rgba(6,182,212,0.03);border:1px solid rgba(6,182,212,0.08);border-radius:14px;display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;">
+                <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#475569;font-weight:600;">
+                    <span style="width:6px;height:6px;border-radius:50%;background:#10B981;animation:pulse-green 2s infinite;display:inline-block;flex-shrink:0;"></span>
+                    <span id="active-investors">247</span> inversores activos
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#475569;font-weight:600;">
+                    ☀️ <span id="kwh-month">142,756</span> kWh este mes
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#475569;font-weight:600;">
+                    🏗️ 3 plantas operativas
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#475569;font-weight:600;">
+                    🔗 Bloque BSC: <span id="last-block-social">--</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─────── VISTA: PORTFOLIO ─────── -->
+        <div class="view" id="view-portfolio">
+            <h2 style="font-size:24px;font-weight:800;color:white;margin-bottom:8px;">Mi Portafolio</h2>
+            <p style="color:#64748b;margin-bottom:28px;font-size:14px;">Distribución de tus activos digitales en la red BSC.</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;">
+                <div class="card" style="padding:28px;">
+                    <h3 style="font-weight:700;color:white;margin-bottom:20px;">Distribución de Activos</h3>
+                    <div style="height:220px;display:flex;align-items:center;justify-content:center;">
+                        <canvas id="donutChart"></canvas>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:10px;margin-top:20px;">
+                        <div style="display:flex;align-items:center;justify-content:space-between;">
+                            <span style="display:flex;align-items:center;gap:8px;color:#94a3b8;font-size:13px;"><span style="width:12px;height:12px;border-radius:3px;background:#06b6d4;display:inline-block;"></span>BNB Nativo</span>
+                            <span id="pct-bnb" style="font-weight:700;color:white;font-family:'Space Grotesk',monospace;">--</span>
+                        </div>
+                        <div style="display:flex;align-items:center;justify-content:space-between;">
+                            <span style="display:flex;align-items:center;gap:8px;color:#94a3b8;font-size:13px;"><span style="width:12px;height:12px;border-radius:3px;background:#F7A600;display:inline-block;"></span>ZOL Utility</span>
+                            <span id="pct-zol" style="font-weight:700;color:white;font-family:'Space Grotesk',monospace;">--</span>
+                        </div>
+                        <div style="display:flex;align-items:center;justify-content:space-between;">
+                            <span style="display:flex;align-items:center;gap:8px;color:#94a3b8;font-size:13px;"><span style="width:12px;height:12px;border-radius:3px;background:#10B981;display:inline-block;"></span>ZOL-PPA RWA</span>
+                            <span id="pct-ppa" style="font-weight:700;color:white;font-family:'Space Grotesk',monospace;">--</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" style="padding:28px;">
+                    <h3 style="font-weight:700;color:white;margin-bottom:20px;">Rendimiento Estimado</h3>
+                    <div style="display:flex;flex-direction:column;gap:16px;">
+                        <div>
+                            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+                                <span style="font-size:13px;color:#94a3b8;">ZOL Utility (ROI mensual)</span>
+                                <span style="font-size:13px;font-weight:700;color:#F7A600;">~2.4%</span>
+                            </div>
+                            <div class="progress-track"><div class="progress-fill" style="width:24%;background:#F7A600;"></div></div>
+                        </div>
+                        <div>
+                            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+                                <span style="font-size:13px;color:#94a3b8;">ZOL-PPA (APY anual)</span>
+                                <span style="font-size:13px;font-weight:700;color:#10B981;">~18%</span>
+                            </div>
+                            <div class="progress-track"><div class="progress-fill" style="width:18%;background:#10B981;"></div></div>
+                        </div>
+                        <div>
+                            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+                                <span style="font-size:13px;color:#94a3b8;">BNB (Apreciación estimada)</span>
+                                <span style="font-size:13px;font-weight:700;color:#06b6d4;">Variable</span>
+                            </div>
+                            <div class="progress-track"><div class="progress-fill" style="width:60%;background:#06b6d4;"></div></div>
+                        </div>
+                    </div>
+                    <div style="margin-top:24px;padding:16px;background:rgba(16,185,129,0.05);border:1px solid rgba(16,185,129,0.15);border-radius:12px;">
+                        <p style="font-size:12px;color:#10B981;font-weight:700;margin-bottom:4px;">💡 Recomendación</p>
+                        <p style="font-size:12px;color:#94a3b8;line-height:1.6;">Diversifica 30% ZOL Utility + 70% ZOL-PPA para maximizar beneficios de descuentos y rentabilidad pasiva.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─────── VISTA: SWAP DEX ─────── -->
+        <div class="view" id="view-buy">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <h2 style="font-size:24px;font-weight:800;color:white;">Intercambio (Swap)</h2>
+                <div style="display:flex; gap:10px;">
+                    <span style="background:rgba(16,185,129,0.1); color:#10B981; padding:4px 10px; border-radius:8px; font-size:12px; font-weight:700;">🟢 BNB Smart Chain</span>
+                    <span style="background:rgba(255,255,255,0.05); color:#94a3b8; padding:4px 10px; border-radius:8px; font-size:12px;"><i style="font-style:normal;">⚙️</i> 0.5% Slippage</span>
+                </div>
+            </div>
+            <p style="color:#64748b;margin-bottom:28px;font-size:14px;">Intercambia instantáneamente BNB por tokens del ecosistema Zolaris a precios de mercado reales.</p>
+            
+            <div style="display:flex; justify-content:center; width:100%;">
+                <div class="card" style="width:100%; max-width:480px; padding:24px; background:linear-gradient(180deg, #0d1f32, #050e1a); border:1px solid rgba(6,182,212,0.15); box-shadow:0 10px 40px rgba(0,0,0,0.5);">
+                    <!-- From -->
+                    <div style="background:rgba(5,14,26,0.8); border-radius:16px; padding:16px; border:1px solid rgba(255,255,255,0.03); margin-bottom:4px;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+                            <span style="color:#94a3b8; font-size:13px; font-weight:600;">Pagas</span>
+                            <span style="color:#64748b; font-size:12px;">Balance: <span id="swap-bnb-bal">0.00</span></span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <input type="number" id="swap-in" placeholder="0.0" oninput="calcSwap()"
+                                style="width:60%; background:transparent; border:none; color:white; font-size:28px; font-weight:800; outline:none; font-family:'Space Grotesk',monospace;">
+                            <div style="display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.05); padding:6px 12px; border-radius:20px;">
+                                <img src="https://cryptologos.cc/logos/bnb-bnb-logo.png" style="width:20px;height:20px;" alt="BNB">
+                                <span style="color:white; font-weight:700;">BNB</span>
+                            </div>
+                        </div>
+                        <div style="color:#64748b; font-size:12px; margin-top:4px;">~$<span id="swap-usd-in">0.00</span></div>
+                    </div>
+                    
+                    <!-- Arrow -->
+                    <div style="display:flex; justify-content:center; margin:-12px 0; position:relative; z-index:2;">
+                        <div style="width:36px; height:36px; background:#0d1f32; border:1px solid rgba(255,255,255,0.05); border-radius:12px; display:flex; align-items:center; justify-content:center; cursor:pointer;">
+                            <span style="color:#06b6d4; font-size:16px;">↓</span>
+                        </div>
+                    </div>
+
+                    <!-- To -->
+                    <div style="background:rgba(5,14,26,0.8); border-radius:16px; padding:16px; border:1px solid rgba(255,255,255,0.03); margin-bottom:20px;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+                            <span style="color:#94a3b8; font-size:13px; font-weight:600;">Recibes</span>
+                            <span style="color:#64748b; font-size:12px;">Balance: <span id="swap-zol-bal">0.00</span></span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <input type="number" id="swap-out" placeholder="0.0" readonly
+                                style="width:60%; background:transparent; border:none; color:white; font-size:28px; font-weight:800; outline:none; font-family:'Space Grotesk',monospace;">
+                            <div style="display:flex; align-items:center; gap:8px; background:rgba(247,166,0,0.15); padding:6px 12px; border-radius:20px; cursor:pointer;">
+                                <span style="font-size:16px;">⚡</span>
+                                <span style="color:#F7A600; font-weight:700;">ZOL</span>
+                                <span style="color:#F7A600; font-size:10px;">▼</span>
+                            </div>
+                        </div>
+                        <div style="color:#64748b; font-size:12px; margin-top:4px;">~$<span id="swap-usd-out">0.00</span></div>
+                    </div>
+
+                    <!-- Details -->
+                    <div style="padding:0 8px 20px 8px; display:flex; flex-direction:column; gap:8px;">
+                        <div style="display:flex; justify-content:space-between; font-size:12px;">
+                            <span style="color:#64748b;">Precio</span>
+                            <span style="color:#94a3b8; font-weight:600;">1 ZOL = <span id="swap-rate">0.000</span> BNB</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; font-size:12px;">
+                            <span style="color:#64748b;">Comisión de Red (Gas)</span>
+                            <span style="color:#94a3b8;">~0.0005 BNB</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; font-size:12px;">
+                            <span style="color:#64748b;">Impacto en el Precio</span>
+                            <span style="color:#10B981;">&lt; 0.01%</span>
+                        </div>
+                    </div>
+
+                    <button id="btn-swap-execute" onclick="executeSwap()"
+                        style="width:100%;padding:18px;background:linear-gradient(135deg,#06b6d4,#0ea5e9);color:white;font-weight:800;font-size:16px;border:none;border-radius:16px;cursor:pointer;transition:all 0.3s;box-shadow:0 8px 20px rgba(6,182,212,0.3);"
+                        onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 12px 25px rgba(6,182,212,0.5)';"
+                        onmouseout="this.style.transform='';this.style.boxShadow='0 8px 20px rgba(6,182,212,0.3)';">
+                        Conectar Wallet
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ─────── VISTA: STAKING ZOL ─────── -->
+        <div class="view" id="view-staking">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <h2 style="font-size:24px;font-weight:800;color:white;">Staking de ZOL</h2>
+                <span style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); color:#10B981; padding:6px 12px; border-radius:12px; font-size:13px; font-weight:800;">APR: 35.5%</span>
+            </div>
+            <p style="color:#64748b;margin-bottom:28px;font-size:14px;">Bloquea tus tokens ZOL y genera recompensas pasivas minuto a minuto. Retira cuando quieras.</p>
+            
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; max-width:900px;">
+                <!-- Staking Info -->
+                <div class="card" style="padding:32px; background:linear-gradient(145deg, #1e3a5f, #0d1f32); border-color:rgba(6,182,212,0.3);">
+                    <h3 style="color:#94a3b8; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Tus ZOL en Staking</h3>
+                    <p style="font-size:42px; font-weight:800; color:white; font-family:'Space Grotesk',monospace; line-height:1; margin-bottom:4px;" id="staking-balance">0.00</p>
+                    <p style="color:#06b6d4; font-size:14px; font-weight:700; margin-bottom:32px;">~$<span id="staking-usd">0.00</span> USD</p>
+                    
+                    <div style="display:flex; gap:12px;">
+                        <button onclick="openStakeModal()" style="flex:1; padding:12px; background:#06b6d4; color:#050e1a; font-weight:800; border:none; border-radius:10px; cursor:pointer;">Depositar</button>
+                        <button onclick="openUnstakeModal()" style="flex:1; padding:12px; background:transparent; color:#06b6d4; border:1px solid #06b6d4; font-weight:800; border-radius:10px; cursor:pointer;">Retirar</button>
+                    </div>
+                </div>
+                
+                <!-- Rewards -->
+                <div class="card" style="padding:32px; border-color:rgba(247,166,0,0.3);">
+                    <h3 style="color:#94a3b8; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Recompensas Generadas</h3>
+                    <div style="display:flex; align-items:baseline; gap:8px;">
+                        <p style="font-size:42px; font-weight:800; color:#F7A600; font-family:'Space Grotesk',monospace; line-height:1; margin-bottom:4px;" id="staking-rewards">0.000000</p>
+                        <span style="color:#F7A600; font-weight:700;">ZOL</span>
+                    </div>
+                    <p style="color:#94a3b8; font-size:14px; margin-bottom:32px;">Generando en tiempo real <span class="status-dot status-connected" style="width:8px;height:8px;margin-left:4px;background:#10B981;box-shadow:0 0 5px #10B981;"></span></p>
+                    
+                    <button onclick="harvestRewards()" style="width:100%; padding:12px; background:linear-gradient(to right, #F7A600, #FDCB58); color:#050e1a; font-weight:800; border:none; border-radius:10px; cursor:pointer;">Cosechar (Harvest)</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ─────── VISTA: HISTORIAL ─────── -->
+        <div class="view" id="view-history">
+            <h2 style="font-size:24px;font-weight:800;color:white;margin-bottom:8px;">Historial de Transacciones</h2>
+            <p style="color:#64748b;margin-bottom:28px;font-size:14px;">Tus transacciones recientes en la Binance Smart Chain.</p>
+            
+            <div class="card" style="padding:0; overflow:hidden;">
+                <table style="width:100%; border-collapse:collapse; text-align:left;">
+                    <thead>
+                        <tr style="background:rgba(255,255,255,0.02); border-bottom:1px solid rgba(255,255,255,0.05);">
+                            <th style="padding:16px 24px; color:#64748b; font-size:12px; font-weight:700; text-transform:uppercase;">Tipo</th>
+                            <th style="padding:16px 24px; color:#64748b; font-size:12px; font-weight:700; text-transform:uppercase;">Monto</th>
+                            <th style="padding:16px 24px; color:#64748b; font-size:12px; font-weight:700; text-transform:uppercase;">Fecha</th>
+                            <th style="padding:16px 24px; color:#64748b; font-size:12px; font-weight:700; text-transform:uppercase;">Estado / Hash</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tx-history-body">
+                        <!-- Llenado por JS -->
+                    </tbody>
+                </table>
+                <div id="no-tx-msg" style="padding:40px; text-align:center; color:#64748b; font-size:14px;">
+                    No hay transacciones recientes.
+                </div>
+            </div>
+        </div>
+
+        <!-- ─────── VISTA: INVERTIR ZOL-PPA ─────── -->
+        <div class="view" id="view-invest">
+            <h2 style="font-size:24px;font-weight:800;color:white;margin-bottom:8px;">Invertir en ZOL-PPA — Activo RWA</h2>
+            <p style="color:#64748b;margin-bottom:28px;font-size:14px;">Security Token respaldado por plantas de generación solar reales. Recibe dividendos mensuales en USDT.</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;max-width:900px;">
+                <div class="card card-accent-cyan" style="padding:32px;">
+                    <div style="width:56px;height:56px;background:rgba(6,182,212,0.15);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:20px;">📈</div>
+                    <div style="display:flex;gap:16px;margin-bottom:20px;">
+                        <div style="flex:1;text-align:center;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:12px;padding:12px;">
+                            <p style="font-size:10px;color:#64748b;font-weight:700;text-transform:uppercase;margin-bottom:4px;">APY Estimado</p>
+                            <p style="font-size:24px;font-weight:800;color:#10B981;">18%</p>
+                        </div>
+                        <div style="flex:1;text-align:center;background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.2);border-radius:12px;padding:12px;">
+                            <p style="font-size:10px;color:#64748b;font-weight:700;text-transform:uppercase;margin-bottom:4px;">Precio Unitario</p>
+                            <p style="font-size:24px;font-weight:800;color:#06b6d4;">$1.20</p>
+                        </div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;margin-bottom:20px;">
+                        <p style="font-size:11px;color:#64748b;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;">Cantidad ZOL-PPA</p>
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <input type="number" id="input-ppa" min="1" placeholder="0"
+                                style="flex:1;background:transparent;border:none;color:white;font-size:28px;font-weight:800;font-family:'Space Grotesk',monospace;outline:none;"
+                                oninput="calcPPACost()">
+                            <span style="font-size:16px;font-weight:700;color:#06b6d4;">PPA</span>
+                        </div>
+                        <div style="border-top:1px solid rgba(255,255,255,0.05);padding-top:12px;margin-top:12px;display:flex;justify-content:space-between;">
+                            <span style="font-size:12px;color:#64748b;">Total en USDT</span>
+                            <span style="font-size:12px;color:#94a3b8;">$<span id="cost-ppa-usd">0.00</span></span>
+                        </div>
+                    </div>
+                    <button onclick="executeTransaction('PPA')"
+                        style="width:100%;padding:16px;background:linear-gradient(135deg,#06b6d4,#0ea5e9);color:white;font-weight:800;font-size:15px;border:none;border-radius:14px;cursor:pointer;transition:all 0.2s;"
+                        onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 20px rgba(6,182,212,0.4)';"
+                        onmouseout="this.style.transform='';this.style.boxShadow='';">
+                        Invertir en ZOL-PPA
+                    </button>
+                </div>
+                <div class="card" style="padding:28px;">
+                    <h3 style="font-weight:700;color:white;margin-bottom:16px;font-size:15px;">Activos Respaldados</h3>
+                    <div style="display:flex;flex-direction:column;gap:12px;">
+                        <div style="padding:12px 16px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;display:flex;justify-content:space-between;align-items:center;">
+                            <span style="color:#94a3b8;font-size:13px;">🏭 Planta Agrícola AQUINE</span>
+                            <span style="color:#10B981;font-size:13px;font-weight:700;">10 kWp</span>
+                        </div>
+                        <div style="padding:12px 16px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;display:flex;justify-content:space-between;align-items:center;">
+                            <span style="color:#94a3b8;font-size:13px;">🏠 Residencia Las Cuadras</span>
+                            <span style="color:#10B981;font-size:13px;font-weight:700;">5.5 kWp</span>
+                        </div>
+                        <div style="padding:12px 16px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;display:flex;justify-content:space-between;align-items:center;">
+                            <span style="color:#94a3b8;font-size:13px;">🏢 Edificio Maridiaz</span>
+                            <span style="color:#10B981;font-size:13px;font-weight:700;">15 kWp</span>
+                        </div>
+                        <div style="padding:12px 16px;background:rgba(6,182,212,0.05);border:1px dashed rgba(6,182,212,0.3);border-radius:12px;display:flex;justify-content:space-between;align-items:center;">
+                            <span style="color:#64748b;font-size:13px;">➕ Próximas instalaciones...</span>
+                            <span style="color:#06b6d4;font-size:12px;font-weight:700;">+120 kWp</span>
+                        </div>
+                    </div>
+                    <div style="margin-top:20px;padding:14px;background:rgba(247,166,0,0.05);border:1px solid rgba(247,166,0,0.15);border-radius:12px;">
+                        <p style="font-size:11px;color:#F7A600;font-weight:700;margin-bottom:4px;">⚠️ Smart Contract</p>
+                        <p style="font-size:11px;color:#64748b;line-height:1.5;">El contrato está compilado y listo. Requiere fondear la wallet desplegadora con BNB para el deploy en Mainnet.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─────── VISTA: RECOMPENSAS ─────── -->
+        <div class="view" id="view-rewards">
+            <h2 style="font-size:24px;font-weight:800;color:white;margin-bottom:8px;">Centro de Recompensas</h2>
+            <p style="color:#64748b;margin-bottom:28px;font-size:14px;">Completa misiones, gana ZOL y sube de nivel en la comunidad solar.</p>
+            <div style="display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap;">
+                <div class="card" style="padding:16px 24px;flex:1;min-width:150px;text-align:center;">
+                    <p class="stat-label">Tus XP</p>
+                    <p class="stat-value" style="color:#F7A600;" id="user-xp">0</p>
+                </div>
+                <div class="card" style="padding:16px 24px;flex:1;min-width:150px;text-align:center;">
+                    <p class="stat-label">Nivel</p>
+                    <p class="stat-value" style="color:#06b6d4;" id="user-level">Semilla ☀️</p>
+                </div>
+                <div class="card" style="padding:16px 24px;flex:1;min-width:200px;">
+                    <p class="stat-label" style="margin-bottom:10px;">Progreso al siguiente nivel</p>
+                    <div class="progress-track">
+                        <div class="progress-fill" id="xp-progress" style="width:0%;background:linear-gradient(to right,#F7A600,#06b6d4);"></div>
+                    </div>
+                    <p style="font-size:11px;color:#64748b;margin-top:6px;"><span id="xp-current">0</span> / <span id="xp-next">100</span> XP</p>
+                </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:12px;">
+                <!-- Missions -->
+                <div class="card" style="padding:20px 24px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;">
+                    <div style="display:flex;gap:16px;align-items:center;">
+                        <div style="width:48px;height:48px;background:rgba(16,185,129,0.15);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🌱</div>
+                        <div>
+                            <h4 style="font-weight:700;color:white;margin-bottom:2px;">Primeros Pasos</h4>
+                            <p style="font-size:13px;color:#64748b;">Conecta tu wallet por primera vez. +50 XP</p>
+                        </div>
+                    </div>
+                    <button id="mission-1-btn" onclick="claimReward('mission-1-btn', 50)"
+                        style="padding:10px 20px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:10px;color:#10B981;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;transition:all 0.2s;"
+                        onmouseover="this.style.background='rgba(16,185,129,0.2)'" onmouseout="this.style.background='rgba(16,185,129,0.1)'">
+                        Reclamar 50 ZOL
+                    </button>
+                </div>
+                <div class="card" style="padding:20px 24px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;opacity:0.7;">
+                    <div style="display:flex;gap:16px;align-items:center;">
+                        <div style="width:48px;height:48px;background:rgba(6,182,212,0.1);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">💧</div>
+                        <div>
+                            <h4 style="font-weight:700;color:white;margin-bottom:2px;">Huella Cero</h4>
+                            <p style="font-size:13px;color:#64748b;">Sube tu factura de luz mostrando ahorro energético. +200 XP</p>
+                        </div>
+                    </div>
+                    <button disabled style="padding:10px 20px;background:transparent;border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#475569;font-weight:700;font-size:13px;cursor:not-allowed;">
+                        🔒 Bloqueado
+                    </button>
+                </div>
+                <div class="card" style="padding:20px 24px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;opacity:0.7;">
+                    <div style="display:flex;gap:16px;align-items:center;">
+                        <div style="width:48px;height:48px;background:rgba(247,166,0,0.1);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">👥</div>
+                        <div>
+                            <h4 style="font-weight:700;color:white;margin-bottom:2px;">Embajador Solar</h4>
+                            <p style="font-size:13px;color:#64748b;">Refiere 3 amigos que se registren. +500 XP + 100 ZOL</p>
+                        </div>
+                    </div>
+                    <button disabled style="padding:10px 20px;background:transparent;border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#475569;font-weight:700;font-size:13px;cursor:not-allowed;">
+                        🔒 Bloqueado
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─────── VISTA: REFERIDOS ─────── -->
+        <div class="view" id="view-referrals">
+            <h2 style="font-size:24px;font-weight:800;color:white;margin-bottom:8px;">Mi Red de Referidos</h2>
+            <p style="color:#64748b;margin-bottom:28px;font-size:14px;">Invita amigos y gana el 5% de sus compras de tokens en ZOL.</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;">
+                <div class="card" style="padding:28px;">
+                    <h3 style="font-weight:700;color:white;margin-bottom:16px;">Tu Enlace Único</h3>
+                    <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(6,182,212,0.2);border-radius:12px;padding:14px;display:flex;gap:10px;align-items:center;margin-bottom:16px;">
+                        <input type="text" id="referral-link" readonly
+                            style="flex:1;background:transparent;border:none;color:#94a3b8;font-size:12px;font-family:'Space Grotesk',monospace;outline:none;"
+                            placeholder="Conecta tu wallet para ver tu enlace">
+                        <button onclick="copyLink()"
+                            style="padding:8px 14px;background:rgba(6,182,212,0.15);border:1px solid rgba(6,182,212,0.3);border-radius:8px;color:#06b6d4;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all 0.2s;"
+                            onmouseover="this.style.background='rgba(6,182,212,0.25)'" onmouseout="this.style.background='rgba(6,182,212,0.15)'">
+                            📋 Copiar
+                        </button>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                        <div style="background:rgba(247,166,0,0.05);border:1px solid rgba(247,166,0,0.15);border-radius:12px;padding:14px;text-align:center;">
+                            <p style="font-size:10px;color:#64748b;font-weight:700;text-transform:uppercase;margin-bottom:4px;">Referidos</p>
+                            <p style="font-size:24px;font-weight:800;color:#F7A600;">0</p>
+                        </div>
+                        <div style="background:rgba(16,185,129,0.05);border:1px solid rgba(16,185,129,0.15);border-radius:12px;padding:14px;text-align:center;">
+                            <p style="font-size:10px;color:#64748b;font-weight:700;text-transform:uppercase;margin-bottom:4px;">ZOL Ganados</p>
+                            <p style="font-size:24px;font-weight:800;color:#10B981;">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" style="padding:28px;">
+                    <h3 style="font-weight:700;color:white;margin-bottom:16px;">Cómo Funciona</h3>
+                    <div style="display:flex;flex-direction:column;gap:14px;">
+                        <div style="display:flex;gap:14px;align-items:flex-start;">
+                            <div style="width:32px;height:32px;background:rgba(6,182,212,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#06b6d4;font-size:14px;flex-shrink:0;">1</div>
+                            <div><p style="color:#94a3b8;font-size:13px;line-height:1.6;">Conecta tu wallet y copia tu enlace único de referido.</p></div>
+                        </div>
+                        <div style="display:flex;gap:14px;align-items:flex-start;">
+                            <div style="width:32px;height:32px;background:rgba(247,166,0,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#F7A600;font-size:14px;flex-shrink:0;">2</div>
+                            <div><p style="color:#94a3b8;font-size:13px;line-height:1.6;">Compártelo con amigos que estén interesados en energía solar o Web3.</p></div>
+                        </div>
+                        <div style="display:flex;gap:14px;align-items:flex-start;">
+                            <div style="width:32px;height:32px;background:rgba(16,185,129,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#10B981;font-size:14px;flex-shrink:0;">3</div>
+                            <div><p style="color:#94a3b8;font-size:13px;line-height:1.6;">Gana 5% de ZOL por cada compra que hagan usando tu enlace.</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<!-- ══════════════════════ SCRIPTS ══════════════════════ -->
+<script>
+    // ─── CONSTANTES BLOCKCHAIN ───
+    const BSC_CHAIN_ID_HEX = '0x38';
+    const BSC_CHAIN_ID_DEC = 56;
+    const BSC_RPC = 'https://bsc-dataseed.binance.org/';
+    const ZOL_PRICE_USD = 0.05;
+    const PPA_PRICE_USD = 1.20;
+
+    // Estado global
+    let provider = null, signer = null, userAddress = null, currentBnbPrice = 600;
+
+    // ─── NAVEGACIÓN ───
+    const VIEWS = ['home', 'portfolio', 'buy', 'invest', 'staking', 'rewards', 'referrals', 'history'];
+
+    function showView(id) {
+        VIEWS.forEach(v => {
+            document.getElementById('view-' + v)?.classList.remove('active');
+            document.getElementById('nav-' + v)?.classList.remove('active');
+        });
+        document.getElementById('view-' + id)?.classList.add('active');
+        document.getElementById('nav-' + id)?.classList.add('active');
+        document.getElementById('page-title').textContent = {
+            home: 'Panel de Control',
+            portfolio: 'Mi Portafolio',
+            buy: 'Swap DEX',
+            staking: 'Staking ZOL',
+            invest: 'Invertir ZOL-PPA',
+            rewards: 'Recompensas',
+            referrals: 'Mis Referidos',
+            history: 'Historial Transacciones'
+        }[id] || id;
+        closeMobile();
+    }
+
+    // ─── METAMASK CONNECTION ───
+    async function connectWallet() {
+        if (!window.ethereum) {
+            Swal.fire({
+                title: '🦊 MetaMask no detectado',
+                html: `<p style="color:#94a3b8;font-size:14px;">Instala la extensión MetaMask para continuar.</p>
+                       <a href="https://metamask.io/download/" target="_blank" style="color:#F7A600;">Descargar MetaMask ↗</a>`,
+                background: '#0d1f32',
+                color: 'white',
+                confirmButtonColor: '#F7A600',
+                confirmButtonText: 'Entendido'
+            });
+            return;
+        }
+
+        // Si ya está conectado, mostrar opciones
+        if (userAddress) {
+            Swal.fire({
+                title: 'Wallet Conectada',
+                html: `<p style="font-family:monospace;color:#06b6d4;font-size:13px;word-break:break-all;">${userAddress}</p>`,
+                background: '#0d1f32',
+                color: 'white',
+                showCancelButton: true,
+                cancelButtonText: 'Cerrar',
+                confirmButtonText: 'Desconectar',
+                confirmButtonColor: '#ef4444',
+            }).then(r => { if (r.isConfirmed) disconnectWallet(); });
+            return;
+        }
+
+        try {
+            // Resolver conflicto de múltiples wallets (ej. Binance Wallet vs MetaMask)
+            let ethProvider = window.ethereum;
+            
+            if (window.ethereum && window.ethereum.providers) {
+                // Filtrar billeteras que suplantan a MetaMask (isMetaMask=true pero tienen su propio flag)
+                const realMetaMask = window.ethereum.providers.find(p => 
+                    p.isMetaMask && 
+                    !p.isBinance && 
+                    !p.isBraveWallet && 
+                    !p.isTrust && 
+                    !p.isTrustWallet && 
+                    !p.isCoinbaseWallet
+                );
+                if (realMetaMask) ethProvider = realMetaMask;
+            }
+
+            // Si otro wallet (que no es metamask) está secuestrando window.ethereum
+            if (!ethProvider.isMetaMask || ethProvider.isBinance) {
+                console.warn("Advertencia: El proveedor detectado no es MetaMask nativo. Es muy probable que sea Binance Wallet interceptando Web3.");
+            }
+
+            console.log("Iniciando eth_requestAccounts...");
+            const accounts = await ethProvider.request({ method: 'eth_requestAccounts' });
+            
+            if (!accounts || accounts.length === 0) {
+                throw new Error("MetaMask no devolvió ninguna cuenta.");
+            }
+
+            userAddress = accounts[0];
+            console.log("Cuenta conectada:", userAddress);
+
+            provider = new ethers.providers.Web3Provider(ethProvider, 'any');
+            signer = provider.getSigner();
+
+            // Verificar y cambiar a BSC Mainnet
+            await ensureBSCNetwork(ethProvider);
+
+            // Actualizar UI
+            onWalletConnected(false);
+
+        } catch (err) {
+            console.error('Error detallado de MetaMask:', err);
+            
+            const errorCode = err.code || "N/A";
+            const errorMessage = err.message || JSON.stringify(err) || "Error desconocido";
+            
+            // Detección específica del error de Binance Wallet
+            if (errorMessage.includes("wallet must has at least one account") || ethProvider?.isBinance) {
+                Swal.fire({
+                    title: '🛑 Conflicto de Extensiones',
+                    html: `<p style="color:#94a3b8;font-size:14px;margin-bottom:15px;">Tu extensión de <b>Binance Wallet</b> (u otra) está bloqueando a MetaMask.</p>
+                           <p style="color:white;font-size:13px;border:1px solid rgba(247,166,0,0.3);padding:10px;border-radius:8px;background:rgba(247,166,0,0.1);">
+                           <b>Solución Eficiente:</b><br>
+                           1. Ve a las extensiones de Chrome (ícono de pieza de rompecabezas arriba a la derecha).<br>
+                           2. Apaga temporalmente la extensión de Binance Chain Wallet.<br>
+                           3. Refresca esta página y vuelve a intentar.
+                           </p>
+                           <p style="color:#F7A600;font-size:14px;margin-top:15px;font-weight:bold;">¿Quieres entrar de inmediato en Modo Demo?</p>`,
+                    icon: 'warning',
+                    background: '#0d1f32',
+                    color: 'white',
+                    showCancelButton: true,
+                    confirmButtonColor: '#06b6d4',
+                    cancelButtonColor: '#1e3a5f',
+                    confirmButtonText: '⚡ Entrar Modo Demo',
+                    cancelButtonText: 'Cerrar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        provider = null; signer = null; userAddress = '0xDEM0000000000000000000000000000000000000';
+                        onWalletConnected(true);
+                        Swal.fire({ title: 'Modo Demo Activo', text: 'Estás explorando el dashboard con una billetera de prueba.', icon: 'success', background: '#0d1f32', color: 'white', confirmButtonColor: '#10B981' });
+                    }
+                });
+                return;
+            }
+
+            // Mostrar error exacto en pantalla para debug
+            Swal.fire({ 
+                title: 'Error de Conexión Web3', 
+                html: `<p style="color:#94a3b8;font-size:14px;margin-bottom:15px;">No se pudo conectar con la billetera. Detalles del error técnico:</p>
+                       <div style="text-align:left;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);padding:12px;border-radius:8px;margin-bottom:15px;word-break:break-all;">
+                           <p style="color:#ef4444;font-size:13px;margin:0 0 5px 0;"><b>Código:</b> ${errorCode}</p>
+                           <p style="color:#ef4444;font-size:13px;margin:0;"><b>Mensaje:</b> ${errorMessage}</p>
+                       </div>
+                       <p style="color:#F7A600;font-size:14px;font-weight:bold;">¿Quieres explorar el Dashboard en Modo Demo?</p>`, 
+                icon: 'error', 
+                background: '#0d1f32', 
+                color: 'white',
+                showCancelButton: true,
+                confirmButtonColor: '#06b6d4',
+                cancelButtonColor: '#1e3a5f',
+                confirmButtonText: '⚡ Entrar Modo Demo',
+                cancelButtonText: 'Cerrar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Activar Modo Demo
+                    provider = null;
+                    signer = null;
+                    userAddress = '0xDEM0000000000000000000000000000000000000';
+                    onWalletConnected(true);
+                    Swal.fire({ title: 'Modo Demo Activo', text: 'Estás explorando el dashboard con una billetera de prueba.', icon: 'success', background: '#0d1f32', color: 'white', confirmButtonColor: '#10B981' });
+                }
+            });
+        }
+    }
+
+    async function ensureBSCNetwork(ethProvider = window.ethereum) {
+        if (!ethProvider) return;
+        try {
+            const chainIdHex = await ethProvider.request({ method: 'eth_chainId' });
+            if (chainIdHex !== BSC_CHAIN_ID_HEX) {
+                try {
+                    await ethProvider.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: BSC_CHAIN_ID_HEX }]
+                    });
+                } catch (switchError) {
+                    if (switchError.code === 4902) {
+                        await ethProvider.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [{
+                                chainId: BSC_CHAIN_ID_HEX,
+                                chainName: 'BNB Smart Chain',
+                                nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+                                rpcUrls: [BSC_RPC, 'https://bsc-dataseed2.binance.org/'],
+                                blockExplorerUrls: ['https://bscscan.com/']
+                            }]
+                        });
+                    } else { throw switchError; }
+                }
+            }
+        } catch (e) { console.warn('Red check:', e.message); }
+    }
+
+    function onWalletConnected(isDemo = false) {
+        // Update button
+        const btn = document.getElementById('connect-btn');
+        const dot = document.getElementById('status-dot');
+        const label = document.getElementById('wallet-label');
+        const shortAddr = isDemo ? 'Modo Demo' : userAddress.substring(0, 6) + '...' + userAddress.substring(38);
+
+        btn.classList.add('connected');
+        dot.classList.replace('status-disconnected', 'status-connected');
+        label.textContent = shortAddr;
+
+        // Show network badge
+        document.getElementById('network-badge').style.display = 'flex';
+        if (isDemo) document.getElementById('network-name-badge').textContent = 'DEMO';
+
+        // Update info card
+        const walletInfo = document.getElementById('wallet-info-card');
+        if (walletInfo) {
+            walletInfo.style.display = 'block';
+            document.getElementById('wallet-full-address').textContent = isDemo ? 'Billetera de Prueba (Simulación)' : userAddress;
+            document.getElementById('network-full').textContent = isDemo ? 'Red Simulada Local' : 'BNB Smart Chain Mainnet (Chain ID: 56)';
+        }
+
+        // Referral link
+        const refLink = document.getElementById('referral-link');
+        if (refLink) refLink.value = `${window.location.origin}/zolaris-token.html?ref=${userAddress}`;
+
+        // Welcome message
+        const welcome = document.getElementById('welcome-msg');
+        if (welcome) welcome.textContent = isDemo ? `Conectado: Modo Demo • Sin riesgo` : `Conectado: ${shortAddr} • BSC Mainnet`;
+        
+        const bnbBadge = document.getElementById('bnb-price-badge');
+        if (bnbBadge) bnbBadge.style.display = 'block';
+
+        // Botones de compra / swap
+        const btnSwap = document.getElementById('btn-swap-execute');
+        if (btnSwap) {
+            btnSwap.textContent = 'Intercambiar';
+            btnSwap.onclick = () => executeSwap();
+        }
+
+        // Load data
+        loadBalances(isDemo);
+        loadStaking();
+        loadHistory();
+        fetchLivePrices();
+        initCharts();
+        initSparklines();
+        loadUSDTBalance(isDemo);
+        updateLevelBadge();
+        fetchGasPrice();
+        fetchLastBlock();
+
+        // Actualizar BscScan link con dirección real
+        if (!isDemo && userAddress) {
+            const bLink = document.getElementById('bscscan-link');
+            if (bLink) bLink.href = 'https://bscscan.com/address/' + userAddress;
+        }
+    }
+
+    function disconnectWallet() {
+        userAddress = null; provider = null; signer = null;
+        document.getElementById('connect-btn').classList.remove('connected');
+        document.getElementById('status-dot').classList.replace('status-connected', 'status-disconnected');
+        document.getElementById('wallet-label').textContent = 'Conectar MetaMask';
+        document.getElementById('network-badge').style.display = 'none';
+
+        const lvlBadge = document.getElementById('level-badge');
+        if (lvlBadge) lvlBadge.className = 'level-badge';
+        
+        const walletInfo = document.getElementById('wallet-info-card');
+        if (walletInfo) walletInfo.style.display = 'none';
+        
+        const welcome = document.getElementById('welcome-msg');
+        if (welcome) welcome.textContent = 'Conecta tu wallet MetaMask para ver tus balances reales en BSC Mainnet.';
+        
+        const bnbBadge = document.getElementById('bnb-price-badge');
+        if (bnbBadge) bnbBadge.style.display = 'none';
+        
+        ['balance-usd', 'balance-bnb', 'balance-zol', 'balance-ppa'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = '0'; });
+        
+        const btnSwap = document.getElementById('btn-swap-execute');
+        if (btnSwap) btnSwap.textContent = 'Conectar Wallet';
+    }
+
+    // ─── BALANCES REALES Y SIMULADOS ───
+    async function loadBalances(isDemo = false) {
+        if (!userAddress) return;
+        try {
+            let bnb = 0;
+            // Leer BNB Real de Mainnet (si no es demo)
+            if (!isDemo && provider) {
+                const rawBal = await provider.getBalance(userAddress);
+                bnb = parseFloat(ethers.utils.formatEther(rawBal));
+            } else if (isDemo) {
+                bnb = 5.0; // En modo demo, damos 5 BNB virtuales
+            }
+            
+            document.getElementById('balance-bnb').textContent = bnb.toFixed(4);
+            const swapBnb = document.getElementById('swap-bnb-bal');
+            if (swapBnb) swapBnb.textContent = bnb.toFixed(4);
+            
+            // Leer Tokens Simulados (localStorage por wallet)
+            const simulatedZol = parseFloat(localStorage.getItem('zol_simulated_' + userAddress)) || 0;
+            const simulatedPpa = parseFloat(localStorage.getItem('ppa_simulated_' + userAddress)) || 0;
+            
+            document.getElementById('balance-zol').textContent = simulatedZol.toFixed(2);
+            document.getElementById('swap-zol-bal').textContent = simulatedZol.toFixed(2);
+            document.getElementById('balance-ppa').textContent = simulatedPpa.toFixed(2);
+
+            // Calcular Total en USD
+            const bnbUsd = bnb * currentBnbPrice;
+            const zolUsd = simulatedZol * ZOL_PRICE_USD;
+            const ppaUsd = simulatedPpa * PPA_PRICE_USD;
+            const totalUsd = bnbUsd + zolUsd + ppaUsd;
+            
+            document.getElementById('balance-usd').textContent = totalUsd.toFixed(2);
+            
+            // Actualizar Gráficos
+            updateDonutChart(bnbUsd, zolUsd, ppaUsd);
+            
+            // Actualizar Gráfico de Línea
+            if (portfolioChart) {
+                const dataArr = portfolioChart.data.datasets[0].data;
+                dataArr[dataArr.length - 1] = totalUsd;
+                portfolioChart.update();
+            }
+
+        } catch (e) { console.warn('Balance error:', e); }
+    }
+
+    // ─── PRECIOS EN VIVO DESDE BINANCE ───
+    async function fetchLivePrices() {
+        try {
+            const res = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BNBUSDT');
+            if (!res.ok) throw new Error('API error');
+            const d = await res.json();
+            currentBnbPrice = parseFloat(d.lastPrice);
+            const change = parseFloat(d.priceChangePercent);
+            const changeColor = change >= 0 ? '#10B981' : '#ef4444';
+            const changeStr = (change >= 0 ? '+' : '') + change.toFixed(2) + '%';
+
+            document.getElementById('live-bnb-price').textContent = '$' + currentBnbPrice.toFixed(2);
+            document.getElementById('price-bnb-card').textContent = '$' + currentBnbPrice.toFixed(2);
+            document.getElementById('change-bnb').textContent = changeStr;
+            document.getElementById('change-bnb').style.color = changeColor;
+
+            if (userAddress) loadBalances();
+        } catch (e) {
+            console.warn('Binance price fetch failed:', e);
+            document.getElementById('price-bnb-card').textContent = '~$600';
+        }
+    }
+
+    // ─── CALCULADORAS ───
+    function calcZOLCost() {
+        const qty = parseFloat(document.getElementById('input-zol').value) || 0;
+        const bnbCost = (qty * ZOL_PRICE_USD) / currentBnbPrice;
+        document.getElementById('cost-zol-bnb').textContent = bnbCost.toFixed(6);
+    }
+
+    // ─── SWAP DEX LOGIC ───
+    function calcSwap() {
+        const bnbIn = parseFloat(document.getElementById('swap-in').value) || 0;
+        const bnbUsd = bnbIn * currentBnbPrice;
+        document.getElementById('swap-usd-in').textContent = bnbUsd.toFixed(2);
+        
+        const zolOut = bnbUsd / ZOL_PRICE_USD;
+        document.getElementById('swap-out').value = zolOut > 0 ? zolOut.toFixed(2) : '';
+        document.getElementById('swap-usd-out').textContent = bnbUsd.toFixed(2); // Same USD value
+
+        const rate = ZOL_PRICE_USD / currentBnbPrice;
+        document.getElementById('swap-rate').textContent = rate.toFixed(6);
+    }
+
+    async function executeSwap() {
+        if (!userAddress) {
+            Swal.fire({ title: '🦊 Conecta tu Wallet', text: 'Necesitas conectar MetaMask primero para realizar un Swap.', icon: 'warning', background: '#0d1f32', color: 'white', confirmButtonColor: '#06b6d4' });
+            return;
+        }
+        const bnbIn = parseFloat(document.getElementById('swap-in').value);
+        if (!bnbIn || bnbIn <= 0) return;
+
+        const zolOut = parseFloat(document.getElementById('swap-out').value);
+
+        const result = await Swal.fire({
+            title: `Confirmar Swap`,
+            html: `<div style="text-align:left; background:rgba(255,255,255,0.05); padding:15px; border-radius:10px; margin-top:10px;">
+                    <p style="margin:5px 0; color:#94a3b8; font-size:14px;">Pagas: <strong style="color:#06b6d4;">${bnbIn} BNB</strong></p>
+                    <p style="margin:5px 0; color:#94a3b8; font-size:14px;">Recibes: <strong style="color:#F7A600;">${zolOut.toFixed(2)} ZOL</strong></p>
+                   </div>
+                   <p style="margin-top:15px; font-size:12px; color:#10B981;">💡 <b>Modo Entrenamiento:</b> Simulación realista sobre BSC Mainnet.</p>`,
+            icon: 'info',
+            background: '#0d1f32',
+            color: 'white',
+            showCancelButton: true,
+            confirmButtonColor: '#06b6d4',
+            cancelButtonColor: '#ef4444',
+            confirmButtonText: 'Firmar en MetaMask'
+        });
+
+        if (result.isConfirmed) {
+            Swal.fire({ title: 'Procesando Swap...', html: '<p style="color:#94a3b8;">Ejecutando contrato inteligente en BSC...</p>', background: '#0d1f32', color: 'white', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); }});
+            
+            setTimeout(() => {
+                const storageKey = 'zol_simulated_' + userAddress;
+                const currentSimBal = parseFloat(localStorage.getItem(storageKey)) || 0;
+                localStorage.setItem(storageKey, currentSimBal + zolOut);
+                
+                // Add to history
+                addTxHistory('Swap', `+${zolOut.toFixed(0)} ZOL`, true);
+
+                document.getElementById('swap-in').value = '';
+                document.getElementById('swap-out').value = '';
+                document.getElementById('swap-usd-in').textContent = '0.00';
+                document.getElementById('swap-usd-out').textContent = '0.00';
+                
+                loadBalances();
+                if (currentSimBal === 0) { claimRewardSilent(100); }
+                
+                Swal.fire({ title: '¡Swap Exitoso!', text: `Has recibido ${zolOut.toFixed(2)} ZOL.`, icon: 'success', background: '#0d1f32', color: 'white', confirmButtonColor: '#10B981' });
+            }, 3500);
+        }
+    }
+
+    // ─── STAKING LOGIC ───
+    let stakingInterval = null;
+
+    function loadStaking() {
+        if (!userAddress) return;
+        const stakedZol = parseFloat(localStorage.getItem('zol_staked_' + userAddress)) || 0;
+        const rewards = parseFloat(localStorage.getItem('zol_rewards_' + userAddress)) || 0;
+        
+        document.getElementById('staking-balance').textContent = stakedZol.toFixed(2);
+        document.getElementById('staking-usd').textContent = (stakedZol * ZOL_PRICE_USD).toFixed(2);
+        document.getElementById('staking-rewards').textContent = rewards.toFixed(6);
+
+        if (stakedZol > 0 && !stakingInterval) {
+            stakingInterval = setInterval(() => {
+                const currentRewards = parseFloat(localStorage.getItem('zol_rewards_' + userAddress)) || 0;
+                // APR 35.5% / year / sec = 0.355 / 31536000 = 1.125e-8 per sec per staked ZOL
+                const earned = stakedZol * 0.00000001125 * 5; // Fast forward x5 for demo
+                const newRewards = currentRewards + earned;
+                localStorage.setItem('zol_rewards_' + userAddress, newRewards);
+                document.getElementById('staking-rewards').textContent = newRewards.toFixed(6);
+            }, 1000);
+        } else if (stakedZol === 0 && stakingInterval) {
+            clearInterval(stakingInterval);
+            stakingInterval = null;
+        }
+    }
+
+    async function openStakeModal() {
+        if (!userAddress) return Swal.fire({ title: '🦊 Conecta tu Wallet', icon: 'warning', background: '#0d1f32', color: 'white' });
+        const currentSimBal = parseFloat(localStorage.getItem('zol_simulated_' + userAddress)) || 0;
+        if (currentSimBal <= 0) return Swal.fire({ title: 'Balance Insuficiente', text: 'No tienes ZOL para hacer staking. Usa el Swap primero.', icon: 'error', background: '#0d1f32', color: 'white' });
+
+        const { value: amount } = await Swal.fire({
+            title: 'Depositar en Staking',
+            input: 'number',
+            inputLabel: `Balance disponible: ${currentSimBal.toFixed(2)} ZOL`,
+            inputPlaceholder: 'Cantidad de ZOL',
+            background: '#0d1f32',
+            color: 'white',
+            showCancelButton: true,
+            confirmButtonColor: '#06b6d4',
+            inputValidator: (value) => {
+                if (!value || value <= 0) return 'Ingresa una cantidad válida';
+                if (value > currentSimBal) return 'No tienes suficientes ZOL';
+            }
+        });
+
+        if (amount) {
+            Swal.fire({ title: 'Depositando...', background: '#0d1f32', color: 'white', didOpen: () => Swal.showLoading() });
+            setTimeout(() => {
+                // Remove from wallet
+                localStorage.setItem('zol_simulated_' + userAddress, currentSimBal - parseFloat(amount));
+                // Add to staking
+                const staked = parseFloat(localStorage.getItem('zol_staked_' + userAddress)) || 0;
+                localStorage.setItem('zol_staked_' + userAddress, staked + parseFloat(amount));
+                
+                addTxHistory('Stake', `${parseFloat(amount).toFixed(2)} ZOL`, true);
+                loadBalances();
+                loadStaking();
+                Swal.fire({ title: '¡Staking Activo!', text: `Tus tokens están generando recompensas.`, icon: 'success', background: '#0d1f32', color: 'white', confirmButtonColor: '#10B981' });
+            }, 2000);
+        }
+    }
+
+    async function openUnstakeModal() {
+        const stakedZol = parseFloat(localStorage.getItem('zol_staked_' + userAddress)) || 0;
+        if (stakedZol <= 0) return;
+        Swal.fire({ title: 'Retirando...', background: '#0d1f32', color: 'white', didOpen: () => Swal.showLoading() });
+        setTimeout(() => {
+            const currentSimBal = parseFloat(localStorage.getItem('zol_simulated_' + userAddress)) || 0;
+            localStorage.setItem('zol_simulated_' + userAddress, currentSimBal + stakedZol);
+            localStorage.setItem('zol_staked_' + userAddress, 0);
+            
+            addTxHistory('Unstake', `${stakedZol.toFixed(2)} ZOL`, true);
+            loadBalances();
+            loadStaking();
+            Swal.close();
+        }, 1500);
+    }
+
+    async function harvestRewards() {
+        const rewards = parseFloat(localStorage.getItem('zol_rewards_' + userAddress)) || 0;
+        if (rewards < 0.0001) return Swal.fire({ title: 'Muy poco para cosechar', text: 'Espera a generar al menos 0.0001 ZOL.', icon: 'info', background: '#0d1f32', color: 'white' });
+        
+        Swal.fire({ title: 'Cosechando...', background: '#0d1f32', color: 'white', didOpen: () => Swal.showLoading() });
+        setTimeout(() => {
+            const currentSimBal = parseFloat(localStorage.getItem('zol_simulated_' + userAddress)) || 0;
+            localStorage.setItem('zol_simulated_' + userAddress, currentSimBal + rewards);
+            localStorage.setItem('zol_rewards_' + userAddress, 0);
+            
+            addTxHistory('Harvest', `+${rewards.toFixed(4)} ZOL`, true);
+            loadBalances();
+            loadStaking();
+            Swal.fire({ title: '¡Cosecha Exitosa!', text: `Has reclamado ${rewards.toFixed(4)} ZOL a tu wallet.`, icon: 'success', background: '#0d1f32', color: 'white', confirmButtonColor: '#10B981' });
+        }, 2000);
+    }
+
+    // ─── HISTORIAL LOGIC ───
+    function addTxHistory(type, amount, isSuccess) {
+        if (!userAddress) return;
+        let history = JSON.parse(localStorage.getItem('tx_history_' + userAddress) || '[]');
+        const hash = '0x' + Math.random().toString(16).substr(2, 8) + '...' + Math.random().toString(16).substr(2, 6);
+        history.unshift({ type, amount, date: new Date().toLocaleString(), hash, isSuccess });
+        if (history.length > 10) history.pop();
+        localStorage.setItem('tx_history_' + userAddress, JSON.stringify(history));
+        loadHistory();
+    }
+
+    function loadHistory() {
+        const tbody = document.getElementById('tx-history-body');
+        const noMsg = document.getElementById('no-tx-msg');
+        if (!tbody || !noMsg) return;
+        
+        if (!userAddress) {
+            tbody.innerHTML = '';
+            noMsg.style.display = 'block';
+            return;
+        }
+
+        const history = JSON.parse(localStorage.getItem('tx_history_' + userAddress) || '[]');
+        if (history.length === 0) {
+            tbody.innerHTML = '';
+            noMsg.style.display = 'block';
+            return;
+        }
+
+        noMsg.style.display = 'none';
+        tbody.innerHTML = history.map(tx => `
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                <td style="padding:16px 24px; color:white; font-weight:600; font-size:13px;">${tx.type}</td>
+                <td style="padding:16px 24px; color:#06b6d4; font-family:'Space Grotesk',monospace; font-weight:700;">${tx.amount}</td>
+                <td style="padding:16px 24px; color:#94a3b8; font-size:12px;">${tx.date}</td>
+                <td style="padding:16px 24px;">
+                    <a href="#" style="color:#10B981; text-decoration:none; font-size:12px; display:flex; align-items:center; gap:6px;">
+                        <span style="width:6px;height:6px;border-radius:50%;background:#10B981;"></span> ${tx.hash}
+                    </a>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    // ─── TRANSACCIONES DE PPA ───
+    async function executeTransaction(type) {
+        if (!userAddress) {
+            Swal.fire({ title: '🦊 Conecta tu Wallet', text: 'Necesitas conectar MetaMask primero para realizar compras.', icon: 'warning', background: '#0d1f32', color: 'white', confirmButtonColor: '#F7A600' });
+            return;
+        }
+        const inputId = type === 'ZOL' ? 'input-zol' : 'input-ppa';
+        const amount = parseFloat(document.getElementById(inputId).value);
+        if (!amount || amount <= 0) {
+            Swal.fire({ title: 'Cantidad inválida', text: 'Ingresa una cantidad mayor a 0.', icon: 'error', background: '#0d1f32', color: 'white' });
+            return;
+        }
+        
+        const costUsd = type === 'ZOL' ? amount * ZOL_PRICE_USD : amount * PPA_PRICE_USD;
+        const bnbCost = costUsd / currentBnbPrice;
+
+        const result = await Swal.fire({
+            title: `Confirmar Inversión`,
+            html: `<div style="text-align:left; background:rgba(255,255,255,0.05); padding:15px; border-radius:10px; margin-top:10px;">
+                    <p style="margin:5px 0; color:#94a3b8; font-size:14px;">Activo a comprar: <strong style="color:white;">${amount} ${type}</strong></p>
+                    <p style="margin:5px 0; color:#94a3b8; font-size:14px;">Costo Estimado: <strong style="color:#06b6d4;">${bnbCost.toFixed(6)} BNB</strong> (~$${costUsd.toFixed(2)} USD)</p>
+                   </div>
+                   <p style="margin-top:15px; font-size:12px; color:#10B981;">💡 <b>Modo Entrenamiento:</b> Esta es una simulación realista sobre BSC Mainnet para que aprendas a usar la plataforma sin pagar gas.</p>`,
+            icon: 'info',
+            background: '#0d1f32',
+            color: 'white',
+            showCancelButton: true,
+            confirmButtonColor: '#06b6d4',
+            cancelButtonColor: '#ef4444',
+            confirmButtonText: 'Aprobar en MetaMask',
+            cancelButtonText: 'Cancelar'
+        });
+
+        if (result.isConfirmed) {
+            // Simulando la espera de transacción en la blockchain
+            Swal.fire({
+                title: 'Transacción en curso',
+                html: '<p style="color:#94a3b8;">Esperando confirmación de la red BSC...</p>',
+                background: '#0d1f32',
+                color: 'white',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            setTimeout(() => {
+                // Guardar en localStorage
+                const storageKey = type === 'ZOL' ? 'zol_simulated_' + userAddress : 'ppa_simulated_' + userAddress;
+                const currentSimBal = parseFloat(localStorage.getItem(storageKey)) || 0;
+                localStorage.setItem(storageKey, currentSimBal + amount);
+
+                loadBalances(); // Actualizar UI
+                
+                // Si es su primera compra de ZOL, darle XP
+                if (type === 'ZOL' && currentSimBal === 0) { claimRewardSilent(100); }
+
+                Swal.fire({
+                    title: '¡Transacción Exitosa!',
+                    html: `<p style="color:#94a3b8;">Has adquirido <b>${amount} ${type}</b> exitosamente.</p>`,
+                    icon: 'success',
+                    background: '#0d1f32',
+                    color: 'white',
+                    confirmButtonColor: '#10B981'
+                });
+            }, 3000); // 3 segundos de "minado" simulado
+        }
+    }
+
+    // ─── RECOMPENSAS ───
+    let userXP = 0;
+    function claimReward(btnId, xp) {
+        if (!userAddress) {
+            Swal.fire({ title: 'Conecta tu wallet primero', icon: 'warning', background: '#0d1f32', color: 'white' });
+            return;
+        }
+        userXP += xp;
+        document.getElementById('user-xp').textContent = userXP;
+        document.getElementById('xp-current').textContent = userXP;
+        const pct = Math.min((userXP / 100) * 100, 100);
+        document.getElementById('xp-progress').style.width = pct + '%';
+        if (userXP >= 100) document.getElementById('user-level').textContent = 'Pionero ⚡';
+        if (userXP >= 500) document.getElementById('user-level').textContent = 'Embajador 🌟';
+        updateLevelBadge();
+
+        const btn = document.getElementById(btnId);
+        btn.textContent = '✅ Reclamado';
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+        btn.style.cursor = 'not-allowed';
+
+        Swal.fire({ title: `¡+${xp} XP ganados!`, text: 'Sigue completando misiones para subir de nivel.', icon: 'success', background: '#0d1f32', color: 'white', timer: 2000, showConfirmButton: false });
+    }
+
+    // ─── COPIAR ENLACE ───
+    function copyLink() {
+        const input = document.getElementById('referral-link');
+        if (!input.value || input.value === '') {
+            Swal.fire({ title: 'Conecta tu wallet primero', icon: 'warning', background: '#0d1f32', color: 'white' });
+            return;
+        }
+        navigator.clipboard.writeText(input.value);
+        Swal.fire({ title: '¡Copiado!', text: 'Enlace de referido copiado.', icon: 'success', toast: true, position: 'top-end', showConfirmButton: false, timer: 2500, background: '#0d1f32', color: 'white' });
+    }
+
+    // ─── CHARTS ───
+    let portfolioChart = null, donutChart = null;
+
+    function initCharts() {
+        // Portfolio Line Chart
+        const ctx1 = document.getElementById('portfolioChart').getContext('2d');
+        if (portfolioChart) portfolioChart.destroy();
+        portfolioChart = new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: ['25 May', '28 May', '01 Jun', '05 Jun', '08 Jun', '12 Jun', 'Hoy'],
+                datasets: [{
+                    label: 'Valor USD',
+                    data: [0, 0, 0, 0, 0, 0, parseFloat(document.getElementById('balance-usd').textContent) || 0],
+                    borderColor: '#06b6d4',
+                    backgroundColor: 'rgba(6,182,212,0.08)',
+                    fill: true, tension: 0.4, pointRadius: 4,
+                    pointBackgroundColor: '#06b6d4', pointBorderColor: '#050e1a', pointBorderWidth: 2,
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#475569', font: { family: 'Space Grotesk' } } },
+                    x: { grid: { display: false }, ticks: { color: '#475569', font: { size: 11 } } }
+                }
+            }
+        });
+
+        updateDonutChart(0);
+    }
+
+    function updateDonutChart(bnbUsd, zolUsd, ppaUsd) {
+        const ctx2 = document.getElementById('donutChart')?.getContext('2d');
+        if (!ctx2) return;
+        if (donutChart) donutChart.destroy();
+        
+        const totalUsd = bnbUsd + zolUsd + ppaUsd;
+        
+        // Si no hay balance, mostrar todo vacío
+        const dataVals = totalUsd > 0 ? [bnbUsd, zolUsd, ppaUsd] : [1, 0, 0];
+        const colors = totalUsd > 0 ? ['#06b6d4', '#F7A600', '#10B981'] : ['#1e293b', '#F7A600', '#10B981'];
+
+        donutChart = new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['BNB USD', 'ZOL USD', 'ZOL-PPA USD'],
+                datasets: [{ data: dataVals, backgroundColor: colors, borderColor: '#050e1a', borderWidth: 3, hoverOffset: 8 }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false, cutout: '68%',
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        if (totalUsd > 0) {
+            document.getElementById('pct-bnb').textContent = ((bnbUsd / totalUsd) * 100).toFixed(1) + '%';
+            document.getElementById('pct-zol').textContent = ((zolUsd / totalUsd) * 100).toFixed(1) + '%';
+            document.getElementById('pct-ppa').textContent = ((ppaUsd / totalUsd) * 100).toFixed(1) + '%';
+        } else {
+            document.getElementById('pct-bnb').textContent = '—';
+            document.getElementById('pct-zol').textContent = '—';
+            document.getElementById('pct-ppa').textContent = '—';
+        }
+    }
+
+    function updateChartRange(days) {
+        document.getElementById('btn-30d').style.color = days === 30 ? '#06b6d4' : '#64748b';
+        document.getElementById('btn-7d').style.color = days === 7 ? '#06b6d4' : '#64748b';
+        document.getElementById('btn-30d').style.background = days === 30 ? 'rgba(6,182,212,0.1)' : 'transparent';
+        document.getElementById('btn-7d').style.background = days === 7 ? 'rgba(6,182,212,0.1)' : 'transparent';
+    }
+
+    // ─── EVENTOS METAMASK ───
+    if (window.ethereum) {
+        window.ethereum.on('accountsChanged', (accs) => {
+            if (accs.length === 0) disconnectWallet();
+            else { userAddress = accs[0]; onWalletConnected(); }
+        });
+        window.ethereum.on('chainChanged', () => window.location.reload());
+    }
+
+    // ─── MOBILE ───
+    function toggleMobile() {
+        document.getElementById('sidebar').classList.toggle('open');
+        document.getElementById('mobile-overlay').classList.toggle('open');
+    }
+    function closeMobile() {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('mobile-overlay').classList.remove('open');
+    }
+
+    // ─── TUTORIAL INTERACTIVO (Driver.js) ───
+    function startTutorial() {
+        const driverObj = window.driver.js.driver({
+            showProgress: true,
+            animate: true,
+            nextBtnText: 'Siguiente',
+            prevBtnText: 'Anterior',
+            doneBtnText: '¡Entendido!',
+            steps: [
+                {
+                    element: '#connect-btn',
+                    popover: {
+                        title: '1. Conecta tu Wallet',
+                        description: 'Aquí debes conectar tu MetaMask. Una vez conectado, leeremos tus fondos reales de BNB en la red BSC Mainnet de forma segura.',
+                        side: 'bottom', align: 'end'
+                    }
+                },
+                {
+                    element: '#view-home .card:nth-child(1)',
+                    popover: {
+                        title: '2. Tu Portafolio',
+                        description: 'Este es el resumen de tu cuenta. Verás tus saldos combinados (BNB, ZOL, PPA) convertidos a Dólares (USD).',
+                        side: 'bottom', align: 'start'
+                    }
+                },
+                {
+                    element: '#nav-buy',
+                    popover: {
+                        title: '3. Comprar Token de Utilidad',
+                        description: 'En esta sección puedes simular la compra de ZOL. Funciona exactamente igual a un Smart Contract real, ¡pruébalo sin gastar gas!',
+                        side: 'right', align: 'center',
+                        onNextClick: () => { showView('buy'); driverObj.moveNext(); }
+                    }
+                },
+                {
+                    element: '#view-buy .card-accent-orange',
+                    popover: {
+                        title: '4. Invierte y Aprende',
+                        description: 'Escribe la cantidad de ZOL que deseas y presiona Comprar. Todo el proceso está en Modo Entrenamiento para que aprendas cómo funciona Web3.',
+                        side: 'left', align: 'center'
+                    }
+                },
+                {
+                    element: '#nav-invest',
+                    popover: {
+                        title: '5. Inversión RWA (PPA)',
+                        description: 'Los Tokens RWA (Real World Assets) representan plantas solares físicas. Puedes adquirir PPA desde aquí para simular recibir dividendos.',
+                        side: 'right', align: 'center',
+                        onNextClick: () => { showView('invest'); driverObj.moveNext(); }
+                    }
+                },
+                {
+                    element: '#nav-rewards',
+                    popover: {
+                        title: '6. Misiones y Recompensas',
+                        description: '¡Por interactuar con el Dashboard ganas XP (Experiencia)! Sube de nivel para reclamar beneficios en el ecosistema Zolaris.',
+                        side: 'right', align: 'center',
+                        onNextClick: () => { showView('rewards'); driverObj.moveNext(); }
+                    }
+                },
+                {
+                    element: '#view-rewards',
+                    popover: {
+                        title: '¡Eso es todo!',
+                        description: 'Explora, conecta tu wallet y realiza tus primeras inversiones simuladas. ¡Bienvenido al futuro de la energía!',
+                        side: 'top', align: 'center'
+                    }
+                }
+            ]
+        });
+        
+        // Empezar en Home
+        showView('home');
+        driverObj.drive();
+    }
+
+    // ─── INIT ───
+    document.addEventListener('DOMContentLoaded', () => {
+        showView('home');
+        initCharts();
+        initSparklines();
+        fetchLivePrices();
+        fetchGasPrice();
+        fetchLastBlock();
+        updateCountdown();
+        updateSolarCounter();
+
+        setInterval(fetchLivePrices, 30000);
+        setInterval(fetchGasPrice, 15000);
+        setInterval(fetchLastBlock, 12000);
+        setInterval(updateCountdown, 1000);
+        setInterval(updateSolarCounter, 1000);
+        setInterval(simulateActiveInvestors, 9000);
+    });
+
+    // Helper silencioso para misiones durante simulación
+    function claimRewardSilent(xp) {
+        userXP += xp;
+        document.getElementById('user-xp').textContent = userXP;
+        document.getElementById('xp-current').textContent = userXP;
+        const pct = Math.min((userXP / 100) * 100, 100);
+        document.getElementById('xp-progress').style.width = pct + '%';
+        if (userXP >= 100) document.getElementById('user-level').textContent = 'Pionero ⚡';
+        updateLevelBadge();
+
+        const btn = document.getElementById('mission-1-btn');
+        if (btn && !btn.disabled) {
+            btn.textContent = '✅ Reclamado';
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+            btn.style.cursor = 'not-allowed';
+        }
+    }
+
+    // ══════════════════════════════════════════════════════
+    //  NUEVAS FUNCIONES PREMIUM — Dashboard Nivel Mundial
+    // ══════════════════════════════════════════════════════
+
+    // ─── GAS TRACKER (BSC RPC directo, sin API key) ───
+    async function fetchGasPrice() {
+        try {
+            const res = await fetch(BSC_RPC, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ jsonrpc: '2.0', method: 'eth_gasPrice', params: [], id: 1 })
+            });
+            const data = await res.json();
+            const gwei = parseInt(data.result, 16) / 1e9;
+
+            const el   = document.getElementById('gas-tracker');
+            const num  = document.getElementById('gas-gwei');
+            const det  = document.getElementById('gas-detail-val');
+
+            if (num) num.textContent = gwei.toFixed(1);
+            if (det) det.textContent = gwei.toFixed(1);
+            if (el) {
+                el.className = 'gas-badge';
+                if (gwei > 5)  el.classList.add('medium');
+                if (gwei > 10) el.classList.add('high');
+            }
+        } catch(e) {
+            const num = document.getElementById('gas-gwei');
+            if (num) num.textContent = '~3';
+        }
+    }
+
+    // ─── ÚLTIMO BLOQUE BSC ───
+    async function fetchLastBlock() {
+        try {
+            const res = await fetch(BSC_RPC, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ jsonrpc: '2.0', method: 'eth_blockNumber', params: [], id: 1 })
+            });
+            const data = await res.json();
+            const block = parseInt(data.result, 16);
+            const el = document.getElementById('last-block-social');
+            if (el) el.textContent = '#' + block.toLocaleString('es');
+        } catch(e) {}
+    }
+
+    // ─── USDT ON-CHAIN (BEP-20, Contrato oficial BSC) ───
+    async function loadUSDTBalance(isDemo = false) {
+        const el      = document.getElementById('balance-usdt');
+        const status  = document.getElementById('usdt-status');
+        const detail  = document.getElementById('usdt-wallet-detail');
+
+        if (isDemo) {
+            if (el)     el.textContent     = '125.00';
+            if (status) status.textContent = 'Demo • Simulado';
+            if (detail) detail.textContent = '125.00';
+            return;
+        }
+        if (!provider || !userAddress) return;
+
+        try {
+            if (status) status.textContent = 'Leyendo on-chain...';
+            const USDT   = '0x55d398326f99059fF775485246999027B3197955';
+            const ABI    = ['function balanceOf(address owner) view returns (uint256)'];
+            const usdtC  = new ethers.Contract(USDT, ABI, provider);
+            const raw    = await usdtC.balanceOf(userAddress);
+            const bal    = parseFloat(ethers.utils.formatUnits(raw, 18));
+
+            if (el)     el.textContent     = bal.toFixed(2);
+            if (status) status.textContent = 'On-Chain ✓ BSC';
+            if (detail) detail.textContent = bal.toFixed(2);
+        } catch(e) {
+            console.warn('USDT balance error:', e);
+            if (el)     el.textContent     = '0.00';
+            if (status) status.textContent = 'Error al consultar';
+        }
+    }
+
+    // ─── COUNTDOWN AL PRÓXIMO DIVIDENDO (1° de cada mes) ───
+    function updateCountdown() {
+        const now       = new Date();
+        const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+        const diff      = nextMonth - now;
+        if (diff <= 0) return;
+
+        const days  = Math.floor(diff / 86400000);
+        const hours = Math.floor((diff % 86400000) / 3600000);
+        const mins  = Math.floor((diff % 3600000)  / 60000);
+        const secs  = Math.floor((diff % 60000)    / 1000);
+        const pad   = n => String(Math.max(0, n)).padStart(2, '0');
+
+        ['cd-days','cd-hours','cd-mins','cd-secs'].forEach((id, i) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = pad([days, hours, mins, secs][i]);
+        });
+    }
+
+    // ─── CONTADOR SOLAR EN TIEMPO REAL ───
+    let solarKwh = 142756.80;
+    const CO2_PER_KWH = 0.000134; // t CO₂/kWh — factor red Colombia
+    function updateSolarCounter() {
+        // 30.5 kWp × 4.5h promedio / 86400 s ≈ 0.00159 kWh/s
+        solarKwh += 0.00159;
+        const el    = document.getElementById('solar-kwh');
+        const co2El = document.getElementById('co2-avoided');
+        const kwEl  = document.getElementById('kwh-month');
+        if (el)    el.textContent    = solarKwh.toFixed(2);
+        if (co2El) co2El.textContent = (solarKwh * CO2_PER_KWH).toFixed(1) + ' t';
+        if (kwEl)  kwEl.textContent  = Math.floor(solarKwh).toLocaleString('es');
+    }
+
+    // ─── COPIAR DIRECCIÓN CON FEEDBACK ───
+    function copyAddress() {
+        const addr = document.getElementById('wallet-full-address')?.textContent;
+        if (!addr || addr === '--' || addr.includes('Prueba')) return;
+
+        const showToast = () => {
+            const toast = document.getElementById('copy-toast');
+            if (toast) { toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2500); }
+            const btn = document.getElementById('copy-addr-btn');
+            if (btn) { btn.textContent = '✅'; setTimeout(() => btn.textContent = '📋', 2000); }
+        };
+
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(addr).then(showToast).catch(() => {
+                const ta = document.createElement('textarea');
+                ta.value = addr; document.body.appendChild(ta); ta.select();
+                document.execCommand('copy'); document.body.removeChild(ta);
+                showToast();
+            });
+        } else {
+            const ta = document.createElement('textarea');
+            ta.value = addr; document.body.appendChild(ta); ta.select();
+            document.execCommand('copy'); document.body.removeChild(ta);
+            showToast();
+        }
+    }
+
+    // ─── LEVEL BADGE EN TOPBAR ───
+    function updateLevelBadge() {
+        const badge   = document.getElementById('level-badge');
+        const levelEl = document.getElementById('topbar-level');
+        if (!badge || !levelEl) return;
+        if (!userAddress) { badge.className = 'level-badge'; return; }
+
+        let level = 'Explorador 🔭';
+        if (userXP >= 500)      level = 'Embajador 🌟';
+        else if (userXP >= 100) level = 'Pionero ⚡';
+        else if (userXP >= 10)  level = 'Inversor 💎';
+
+        levelEl.textContent = level;
+        badge.className     = 'level-badge show';
+    }
+
+    // ─── SPARKLINES 24H POR ACTIVO ───
+    const _sparkCharts = {};
+    function initSparklines() {
+        const makeData = (base, variance, trend = 0) =>
+            Array.from({ length: 24 }, (_, i) =>
+                Math.max(0, base + (Math.random() - 0.5) * variance + (i / 24) * trend)
+            );
+
+        const sparkCfg = (data, color) => ({
+            type: 'line',
+            data: {
+                labels: Array(24).fill(''),
+                datasets: [{ data, borderColor: color, borderWidth: 1.5, pointRadius: 0,
+                    fill: true, backgroundColor: color + '1a', tension: 0.4 }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                scales: { x: { display: false }, y: { display: false } },
+                animation: { duration: 900 }
+            }
+        });
+
+        [
+            { id: 'spark-bnb',  base: currentBnbPrice, var: currentBnbPrice * 0.04, trend: currentBnbPrice * 0.015, color: '#06b6d4' },
+            { id: 'spark-zol',  base: 0.05,            var: 0.006,                  trend: 0.002,                  color: '#F7A600' },
+            { id: 'spark-ppa',  base: 1.20,            var: 0.04,                   trend: 0.01,                   color: '#10B981' },
+            { id: 'spark-usdt', base: 1.0,             var: 0.001,                  trend: 0,                      color: '#26a17b' },
+        ].forEach(({ id, base, var: v, trend, color }) => {
+            const canvas = document.getElementById(id);
+            if (!canvas) return;
+            if (_sparkCharts[id]) _sparkCharts[id].destroy();
+            _sparkCharts[id] = new Chart(canvas.getContext('2d'), sparkCfg(makeData(base, v, trend), color));
+        });
+    }
+
+    // ─── SIMULAR INVERSORES ACTIVOS ───
+    function simulateActiveInvestors() {
+        const el = document.getElementById('active-investors');
+        if (el) el.textContent = 247 + Math.floor(Math.random() * 12) - 6;
+    }
+
+</script>
+
+<!-- Toast: Dirección copiada -->
+<div id="copy-toast">✅ Dirección copiada al portapapeles</div>
+
+</body>
+</html>
