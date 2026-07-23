@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculadora Solar | Zolaris Ingeniería</title>
+    <meta name="description" content="Cotiza tu sistema solar en segundos con la tecnología de Zolaris. Calcula ahorro, paneles necesarios y tiempo de retorno de inversión." />
+    <link rel="icon" type="image/png" href="/assets/logo.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#F7A600" />
+    <link rel="apple-touch-icon" href="/assets/logo.png" />
+    <!-- Open Graph -->
+    <meta property="og:title" content="Calculadora Solar Zolaris Premium" />
+    <meta property="og:description" content="Descubre cuánto puedes ahorrar con energía solar. Calcula tu inversión, paneles y retorno en segundos." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/assets/fotoh2.jpg" />
+    <meta property="og:url" content="https://zolarisingenieria.com/calculadora.html" />
+    <meta property="og:locale" content="es_CO" />
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Calculadora Solar Gratis | Zolaris" />
+    <meta name="twitter:description" content="Calcula en segundos cuánto ahorras con energía solar. Resultados instantáneos para toda Colombia." />
+    <meta name="twitter:image" content="/assets/fotoh2.jpg" />
+    <!-- Preload hero -->
+    <link rel="preload" as="image" href="/assets/fotoh2.jpg" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    
+    
+
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; }
+        
+        /* Navbar Glass Effect */
+        .glass-nav { background: rgba(11, 43, 70, 0.90); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+
+        /* Estilos de inputs */
+        .glass-panel { 
+            background: rgba(30, 41, 59, 0.5); 
+            backdrop-filter: blur(12px); 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+        }
+
+        .glass-input {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            color: white;
+        }
+        
+        .glass-input:focus {
+            border-color: #F7A600;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(247, 166, 0, 0.2);
+        }
+
+        /* Range Slider */
+        input[type="range"] { -webkit-appearance: none; background: transparent; }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; height: 20px; width: 20px;
+            border-radius: 50%; background: #F7A600; cursor: pointer;
+            margin-top: -8px; border: 2px solid #fff;
+        }
+        input[type="range"]::-webkit-slider-runnable-track {
+            width: 100%; height: 4px; cursor: pointer;
+            background: rgba(255,255,255,0.2); border-radius: 2px;
+        }
+
+        /* Estado Bloqueado (Blur) */
+        .step-locked {
+            opacity: 0.4;
+            pointer-events: none;
+            filter: blur(4px);
+            user-select: none;
+            transition: all 0.5s ease;
+        }
+
+        /* Modals */
+        dialog::backdrop { background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(4px); }
+    </style>
+    <script type="module" src="/src/main.js"></script>
+    <link rel="stylesheet" href="/src/style.css">
+</head>
+<body class="antialiased overflow-x-hidden selection:bg-zolaris-orange selection:text-white flex flex-col min-h-screen">
+
+    <nav class="fixed w-full z-50 glass-nav transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-24">
+                <a href="index.html" class="flex-shrink-0 flex items-center gap-3 cursor-pointer group">
+                    <img class="h-12 w-auto transition-transform transform group-hover:scale-110 duration-500" 
+                        src="/assets/logo.png" 
+                        alt="Zolaris Logo">
+                </a>
+                <div class="hidden lg:flex space-x-8 items-center">
+                    <a href="index.html" class="text-slate-300 font-medium hover:text-white hover:scale-105 transition-all">Inicio</a>
+                    <a href="nosotros.html" class="text-slate-300 font-medium hover:text-white hover:scale-105 transition-all">Nuestra Historia</a>
+                    <a href="proyectos.html" class="text-slate-300 font-medium hover:text-white hover:scale-105 transition-all">Proyectos</a>
+                    <a href="servicios.html" class="text-slate-300 font-medium hover:text-white hover:scale-105 transition-all">Servicios</a>
+                    <a href="zolaris-token.html" class="group relative inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-[#0B2B46]/30 border border-cyan-500/50 backdrop-blur-sm text-cyan-400 font-bold text-sm tracking-wide transition-all duration-300 ease-out hover:border-cyan-400 hover:bg-cyan-950/30 hover:shadow-[0_0_20px_rgba(34,211,238,0.6)] hover:-translate-y-0.5 active:scale-95">
+                        <span class="relative flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500"></span>
+                        </span>
+                        <span class="relative z-10 drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]">Zolaris Token</span>
+                        <div class="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500/0 via-cyan-500/10 to-cyan-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    </a>
+                    <a href="calculadora.html" class="group relative px-6 py-3 font-bold text-zolaris-navy rounded-full bg-gradient-to-r from-zolaris-yellow to-zolaris-orange shadow-[0_0_15px_rgba(247,166,0,0.4)] hover:shadow-[0_0_25px_rgba(247,166,0,0.6)] transition-all transform hover:-translate-y-1 overflow-hidden">
+                        <span class="relative z-10 flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            Cotiza ¡YA!
+                        </span>
+                        <div class="absolute inset-0 h-full w-full bg-white/30 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
+                    </a>
+                </div>
+                <div class="lg:hidden flex items-center">
+                    <button onclick="toggleMobileMenu()" class="text-white hover:text-zolaris-yellow focus:outline-none p-2 rounded-md hover:bg-white/10 transition-colors">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden lg:hidden bg-zolaris-navy/95 backdrop-blur-xl border-t border-slate-700 absolute w-full left-0 top-24 shadow-2xl transition-all duration-300 origin-top transform scale-y-0 opacity-0">
+            <div class="px-4 pt-4 pb-8 space-y-2">
+                <a href="index.html" class="block px-4 py-3 rounded-lg text-base font-medium text-white bg-white/10">Inicio</a>
+                <a href="nosotros.html" class="block px-4 py-3 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-white/5">Nuestra Historia</a>
+                <a href="proyectos.html" class="block px-4 py-3 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-white/5">Proyectos</a>
+                <a href="servicios.html" class="block px-4 py-3 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-white/5">Servicios</a>
+                <a href="calculadora.html" class="block mt-4 px-4 py-4 rounded-xl text-center text-base font-bold text-zolaris-navy bg-gradient-to-r from-zolaris-yellow to-zolaris-orange">Cotiza ¡YA!</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative h-[50vh] min-h-[400px] flex items-center justify-center overflow-hidden pt-20">
+        <div class="absolute inset-0 z-0">
+            <img src="/assets/fotoh2.jpg" alt="Fondo Calculadora Solar" loading="eager" decoding="async" class="w-full h-full object-cover"/>
+            <div class="absolute inset-0 bg-gradient-to-b from-zolaris-navy/90 via-zolaris-navy/70 to-[#0f172a]"></div>
+        </div>
+
+        <div class="relative z-10 text-center max-w-4xl mx-auto px-4 animate-fade-in-up">
+            <div class="inline-block mb-4 p-1 rounded-full bg-gradient-to-r from-zolaris-orange to-zolaris-yellow">
+                <div class="bg-zolaris-navy px-6 py-2 rounded-full">
+                    <span class="text-zolaris-yellow text-xs font-bold tracking-[0.3em] uppercase">Tecnología Inteligente</span>
+                </div>
+            </div>
+            
+            <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
+                Calculadora Solar <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-zolaris-yellow to-zolaris-orange">Zolaris Premium</span>
+            </h1>
+            <p class="text-lg text-slate-300 font-light max-w-2xl mx-auto">
+                Descubre cuánto puedes ahorrar generando tu propia energía. Algoritmos basados en radiación real y tarifas 2026.
+            </p>
+        </div>
+    </header>
+
+    <section class="py-20 bg-[#0f172a] relative">
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-zolaris-blue/10 rounded-full blur-[100px]"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <div class="lg:col-span-5 space-y-6">
+                    
+                    <div class="glass-panel rounded-3xl p-8 relative overflow-hidden transition-all" id="panel-datos">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-zolaris-orange"></div>
+                        <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-full bg-zolaris-orange/20 flex items-center justify-center text-zolaris-orange text-sm">1</span>
+                            Tus Datos
+                        </h2>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Nombre Completo <span class="text-red-500">*</span></label>
+                                <input type="text" id="lead-name" class="w-full glass-input rounded-xl p-3 placeholder-slate-500" placeholder="Ej: Iván Andrés">
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Celular <span class="text-red-500">*</span></label>
+                                    <input type="tel" id="lead-phone" class="w-full glass-input rounded-xl p-3 placeholder-slate-500" placeholder="300 123...">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Email <span class="text-red-500">*</span></label>
+                                    <input type="email" id="lead-email" class="w-full glass-input rounded-xl p-3 placeholder-slate-500" placeholder="tu@email.com">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Ciudad</label>
+                                <select id="lead-city" class="w-full glass-input rounded-xl p-3 cursor-pointer bg-slate-900" onchange="handleCityChange()">
+                                    </select>
+                            </div>
+                            
+                            <div class="pt-4">
+                                <button onclick="unlockStep2()" class="w-full py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl transition-colors flex justify-center items-center gap-2">
+                                    CONTINUAR
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                                <p class="text-center text-xs text-red-400 mt-2 hidden" id="step1-error">Por favor completa todos los campos correctamente.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="step-2-wrapper" class="step-locked transition-all duration-700">
+                        <div class="glass-panel rounded-3xl p-8 relative">
+                            <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-full bg-zolaris-orange/20 flex items-center justify-center text-zolaris-orange text-sm">2</span>
+                                Consumo
+                            </h2>
+
+                            <div class="bg-slate-900/50 p-1 rounded-xl flex mb-6 border border-white/5">
+                                <button onclick="setInputMode('bill')" id="btn-mode-bill" class="flex-1 py-2 rounded-lg text-sm font-bold transition-all bg-zolaris-orange text-zolaris-navy shadow-lg">
+                                    Valor Factura ($)
+                                </button>
+                                <button onclick="setInputMode('kwh')" id="btn-mode-kwh" class="flex-1 py-2 rounded-lg text-sm font-bold transition-all text-slate-400 hover:text-white">
+                                    Consumo (kWh)
+                                </button>
+                            </div>
+
+                            <div class="mb-8">
+                                <div class="flex justify-between items-end mb-4">
+                                    <span class="text-slate-400 font-medium" id="slider-label">Pago Mensual Promedio</span>
+                                    <div class="text-right">
+                                        <span class="text-3xl font-bold text-zolaris-orange block" id="display-value">$ 200.000</span>
+                                        <span class="text-xs text-slate-500" id="display-subtext">~212 kWh/mes</span>
+                                    </div>
+                                </div>
+                                <input type="range" id="consumption-slider" class="w-full mb-2" oninput="handleSliderChange(this.value)">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Tipo de Techo</label>
+                                    <select id="roof-type" class="w-full glass-input rounded-xl p-2 text-sm bg-slate-900">
+                                        <option value="Teja de Barro">Teja de Barro</option>
+                                        <option value="Termoacústica">Termoacústica</option>
+                                        <option value="Placa Concreto">Placa Concreto</option>
+                                        <option value="Estructura Metálica">Estructura Metálica</option>
+                                    </select>
+                                </div>
+                                <div id="container-tarifa">
+                                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Tarifa ($/kWh)</label>
+                                    <input type="number" id="kwh-price" class="w-full glass-input rounded-xl p-2 text-sm bg-slate-800" readonly>
+                                    <p class="text-[10px] text-slate-500 mt-1">*Tarifa promedio segun ciudad</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7 space-y-6 step-locked transition-all duration-700" id="step-3-wrapper">
+                    
+                    <div class="glass-panel rounded-3xl p-8 border-t-4 border-t-zolaris-orange relative overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900">
+                        <div class="absolute -right-20 -top-20 w-64 h-64 bg-zolaris-orange/10 rounded-full blur-3xl"></div>
+                        
+                        <div class="relative z-10 text-center md:text-left">
+                            <h3 class="text-zolaris-orange text-sm font-bold uppercase tracking-widest mb-2">Inversión Estimada "Llave en Mano"</h3>
+                            <div class="text-5xl md:text-7xl font-extrabold text-white mb-2" id="result-cost">$ 0</div>
+                            <p class="text-slate-500 text-xs mb-8">*Incluye Paneles, Inversores, Estructura, Ingeniería y Trámites.</p>
+                            
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div class="bg-slate-900/50 p-4 rounded-xl border border-white/5">
+                                    <p class="text-slate-400 text-[10px] uppercase font-bold">Potencia</p>
+                                    <p class="text-xl font-bold text-white" id="result-power">0 kWp</p>
+                                </div>
+                                <div class="bg-slate-900/50 p-4 rounded-xl border border-white/5">
+                                    <p class="text-slate-400 text-[10px] uppercase font-bold">Paneles (730W)</p>
+                                    <p class="text-xl font-bold text-white" id="result-panels">0</p>
+                                </div>
+                                <div class="bg-slate-900/50 p-4 rounded-xl border border-white/5">
+                                    <p class="text-green-400 text-[10px] uppercase font-bold">Ahorro Mensual</p>
+                                    <p class="text-xl font-bold text-green-400" id="result-savings">$ 0</p>
+                                </div>
+                                <div class="bg-slate-900/50 p-4 rounded-xl border border-white/5">
+                                    <p class="text-zolaris-yellow text-[10px] uppercase font-bold">Payback</p>
+                                    <p class="text-xl font-bold text-zolaris-yellow" id="result-payback">0 Años</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="glass-panel p-6 rounded-2xl flex items-center gap-4">
+                            <div class="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center shrink-0">
+                                <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold text-white" id="impact-co2">0 Ton</div>
+                                <div class="text-xs text-slate-400 uppercase">CO2 Evitado</div>
+                            </div>
+                        </div>
+                        <div class="glass-panel p-6 rounded-2xl flex items-center gap-4">
+                            <div class="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center shrink-0">
+                                <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold text-white" id="impact-trees">0</div>
+                                <div class="text-xs text-slate-400 uppercase">Árboles</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-4 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4 border border-slate-700 bg-slate-900/60">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center border border-slate-600">
+                                <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                            </div>
+                            <div class="text-sm">
+                                <p class="text-white font-bold">Verificación de Seguridad</p>
+                                <p class="text-slate-400">Resuelve: <span id="captcha-question" class="font-mono text-zolaris-yellow font-bold text-lg"></span></p>
+                            </div>
+                        </div>
+                        <input type="number" id="captcha-input" placeholder="Tu respuesta" class="glass-input w-24 text-center rounded-lg p-2 font-bold text-lg">
+                    </div>
+
+                    <button id="btn-submit" onclick="submitData()" class="group w-full py-5 bg-gradient-to-r from-zolaris-orange to-zolaris-yellow hover:from-orange-500 hover:to-yellow-400 text-zolaris-navy font-black text-lg rounded-2xl shadow-[0_0_20px_rgba(247,166,0,0.3)] transition-all transform hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-3">
+                        <span id="btn-text">SOLICITAR PROPUESTA FORMAL</span>
+                        <svg id="btn-icon" class="w-6 h-6 group-hover:translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.463 1.065 2.876 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                        <svg id="loading-icon" class="hidden w-6 h-6 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    </button>
+                    <p class="text-center text-xs text-slate-500">Un ingeniero de Zolaris validará estos datos contigo vía WhatsApp.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-zolaris-navy text-slate-300 pt-20 pb-10 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                <div class="space-y-4">
+                    <img src="/assets/logo.png" alt="Zolaris" class="h-16 brightness-0 invert">
+                    <p class="text-sm leading-relaxed max-w-xs">
+                        El futuro de la energía es solar. Acompañamos tu transición energética con tecnología, confianza y excelencia.
+                    </p>
+                    <div class="flex gap-4 pt-2">
+                        <a href="https://www.instagram.com/zolarisingenieria/" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-zolaris-orange hover:text-white transition-all"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-white font-bold mb-6">Navegación</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="index.html" class="hover:text-zolaris-orange transition-colors">Inicio</a></li>
+                        <li><a href="nosotros.html" class="hover:text-zolaris-orange transition-colors">Nuestra Historia</a></li>
+                        <li><a href="proyectos.html" class="hover:text-zolaris-orange transition-colors">Portafolio</a></li>
+                        <li><a href="calculadora.html" class="hover:text-zolaris-orange transition-colors">Calculadora Solar</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-white font-bold mb-6">Legal</h3>
+                    <ul class="space-y-3 text-sm cursor-pointer">
+                        <li><span onclick="openModal('modal-privacidad')" class="hover:text-zolaris-orange transition-colors">Política de Privacidad</span></li>
+                        <li><span onclick="openModal('modal-terminos')" class="hover:text-zolaris-orange transition-colors">Términos y Condiciones</span></li>
+                        <li><span onclick="openModal('modal-datos')" class="hover:text-zolaris-orange transition-colors">Tratamiento de Datos</span></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-white font-bold mb-6">Contacto</h3>
+                    <ul class="space-y-4 text-sm">
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-zolaris-orange mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            <span>Cra. 37 #19b-35. Oficina 1005. Pasto, Nariño<br>Colombia</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-zolaris-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            <span>tramites.zolaris@gmail.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500">
+                <p>&copy; 2026 Zolaris Ingeniería S.A.S. Todos los derechos reservados.</p>
+                <p>Desarrollado por Ivan Andres Zuñiga</p>
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/573205293939?text=Hola%20Zolaris,%20me%20gustar%C3%ADa%20saber%20m%C3%A1s%20informaci%C3%B3n%20sobre%20paneles%20solares" 
+        target="_blank" 
+        class="fixed bottom-6 right-6 z-50 bg-[#25D366] w-16 h-16 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_0_20px_rgba(37,211,102,0.6)] group"
+        aria-label="Contactar por WhatsApp">
+            
+            <svg class="w-9 h-9 text-white fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+            </svg>
+            
+            <span class="absolute inline-flex h-full w-full rounded-full bg-[#25D366] opacity-30 animate-ping -z-10"></span>
+    </a>
+
+    <div id="modal-privacidad" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeModal('modal-privacidad')"></div>
+        <div class="relative bg-slate-900 w-full max-w-2xl rounded-2xl p-8 border border-slate-700 shadow-2xl max-h-[80vh] overflow-y-auto">
+            <h3 class="text-2xl font-bold text-white mb-4">Política de Privacidad</h3>
+            <div class="text-slate-300 space-y-4 text-sm">
+                <p>En Zolaris Ingeniería S.A.S., valoramos su privacidad y estamos comprometidos con la protección de sus datos personales. Esta política describe cómo recopilamos, usamos y protegemos la información que usted nos proporciona a través de nuestro sitio web y servicios.</p>
+                <p>Recopilamos información personal básica, como nombre, correo electrónico y número de teléfono, únicamente cuando usted la proporciona voluntariamente a través de nuestros formularios de contacto o la calculadora solar. Estos datos se utilizan exclusivamente para brindarle la información solicitada, elaborar cotizaciones y mejorar nuestros servicios.</p>
+                <p>Zolaris no vende, alquila ni comparte su información personal con terceros con fines comerciales. Solo compartiremos sus datos si es necesario para cumplir con una obligación legal o para la ejecución de un contrato de servicio con usted (por ejemplo, trámites ante operadores de red).</p>
+                <p>Implementamos medidas de seguridad técnicas y organizativas para proteger sus datos contra el acceso no autorizado, la alteración o la destrucción. Sin embargo, recuerde que ninguna transmisión por Internet es 100% segura.</p>
+                <p>Usted tiene derecho a acceder, corregir o solicitar la eliminación de sus datos personales en cualquier momento contactándonos a través de nuestros canales oficiales.</p>
+            </div>
+            <button onclick="closeModal('modal-privacidad')" class="mt-6 px-6 py-2 bg-zolaris-orange text-zolaris-navy font-bold rounded-lg hover:bg-white transition-colors">Cerrar</button>
+        </div>
+    </div>
+
+    <div id="modal-terminos" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeModal('modal-terminos')"></div>
+        <div class="relative bg-slate-900 w-full max-w-2xl rounded-2xl p-8 border border-slate-700 shadow-2xl max-h-[80vh] overflow-y-auto">
+            <h3 class="text-2xl font-bold text-white mb-4">Términos y Condiciones</h3>
+            <div class="text-slate-300 space-y-4 text-sm">
+                <p>Bienvenido al sitio web de Zolaris Ingeniería S.A.S. Al acceder y utilizar este sitio, usted acepta cumplir con los siguientes términos y condiciones. Si no está de acuerdo con alguna parte de estos términos, le recomendamos no utilizar nuestros servicios.</p>
+                <p>El contenido de este sitio web, incluyendo textos, imágenes, logotipos y herramientas (como la calculadora solar), es propiedad de Zolaris o de sus licenciantes y está protegido por las leyes de propiedad intelectual. Queda prohibida su reproducción total o parcial sin autorización expresa.</p>
+                <p>Las estimaciones proporcionadas por nuestra calculadora solar son aproximadas y se basan en promedios estadísticos. No constituyen una oferta vinculante ni garantizan ahorros exactos, ya que estos dependen de factores variables como la ubicación exacta, el clima y los hábitos de consumo.</p>
+                <p>Zolaris se reserva el derecho de modificar, suspender o interrumpir cualquier aspecto del servicio en cualquier momento sin previo aviso. No nos hacemos responsables por daños directos o indirectos derivados del uso o la imposibilidad de uso de este sitio web.</p>
+                <p>Cualquier disputa relacionada con estos términos se regirá por las leyes de la República de Colombia y se someterá a la jurisdicción de los tribunales de Pasto, Nariño.</p>
+            </div>
+            <button onclick="closeModal('modal-terminos')" class="mt-6 px-6 py-2 bg-zolaris-orange text-zolaris-navy font-bold rounded-lg hover:bg-white transition-colors">Cerrar</button>
+        </div>
+    </div>
+
+    <div id="modal-datos" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeModal('modal-datos')"></div>
+        <div class="relative bg-slate-900 w-full max-w-2xl rounded-2xl p-8 border border-slate-700 shadow-2xl max-h-[80vh] overflow-y-auto">
+            <h3 class="text-2xl font-bold text-white mb-4">Tratamiento de Datos</h3>
+            <div class="text-slate-300 space-y-4 text-sm">
+                <p>En cumplimiento de la Ley 1581 de 2012 y el Decreto 1377 de 2013, Zolaris Ingeniería S.A.S. informa a los titulares de datos personales que la información recolectada será tratada de acuerdo con nuestra Política de Tratamiento de Datos.</p>
+                <p>La recolección de datos tiene como finalidad principal la gestión administrativa, comercial y operativa necesaria para la prestación de nuestros servicios de energía solar. Esto incluye el envío de cotizaciones, información técnica y actualizaciones sobre proyectos.</p>
+                <p>Como titular de los datos, usted tiene derecho a conocer, actualizar y rectificar su información personal, así como a revocar la autorización otorgada para su tratamiento en los casos previstos por la ley.</p>
+                <p>Zolaris garantiza la confidencialidad y seguridad de la información, adoptando las medidas necesarias para evitar su adulteración, pérdida, consulta, uso o acceso no autorizado o fraudulento.</p>
+                <p>Para ejercer sus derechos de Habeas Data, puede contactarnos a través del correo electrónico tramites.zolaris@gmail.com o en nuestra oficina física en Pasto, Nariño.</p>
+            </div>
+            <button onclick="closeModal('modal-datos')" class="mt-6 px-6 py-2 bg-zolaris-orange text-zolaris-navy font-bold rounded-lg hover:bg-white transition-colors">Cerrar</button>
+        </div>
+    </div>
+
+    
+</body>
+</html>
