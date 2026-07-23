@@ -3,6 +3,8 @@ import tailwindcss from '@tailwindcss/vite';
 import { resolve } from 'path';
 
 export default defineConfig({
+  // Ruta base para GitHub Pages (el sitio vive en /zolaris-web/)
+  base: '/zolaris-web/',
   plugins: [
     tailwindcss(),
   ],
